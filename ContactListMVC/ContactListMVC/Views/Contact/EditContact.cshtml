@@ -1,0 +1,56 @@
+﻿@model ContactListMVC.Models.Contact
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Contact List</title>
+    <link href="~/Content/CSS/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+
+        <h1 class="text-center">
+            Contact List
+        </h1>
+        <hr />
+
+        <div class="col-md-4 col-md-offset-4">
+            <h2>Edit Contact</h2>
+
+            @using (Html.BeginForm("EditContact", "Contact", FormMethod.Post))
+            {
+                @Html.ValidationSummary(true)
+                @Html.Hidden("ContactID", Model.ContactID);
+                <div class="form-group">
+                    @Html.LabelFor(m => m.FirstName)
+                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", placeholder = Model.FirstName })
+                    <span class="text-danger">@Html.ValidationMessageFor(m => m.FirstName)</span>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.LastName)
+                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", placeholder = Model.LastName })
+                    <span class="text-danger">@Html.ValidationMessageFor(m => m.LastName)</span>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.PhoneNumber)
+                    @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", placeholder = Model.PhoneNumber })
+                    <span class="text-danger">@Html.ValidationMessageFor(m => m.PhoneNumber)</span>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Email)
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = Model.Email, @type = "email" })
+                    <span class="text-danger">@Html.ValidationMessageFor(m => m.Email)</span>
+                </div>
+                <button type="submit" class="btn btn-primary">Edit Contact</button>
+            }
+        </div>
+
+    </div>
+</body>
+</html>

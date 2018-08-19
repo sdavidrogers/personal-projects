@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Contact List</title>
+    <link href="../Content/CSS/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+
+        <h1 class="text-center">
+            Contact List
+        </h1>
+        <hr />
+
+        <div class="col-md-4 col-md-offset-4">
+            <h2 class="text-center">Add Contact</h2>
+            <br />
+
+            <form class="form-horizontal" role="form" id="add-form">
+
+                <div class="form-group">
+                    <label for="add-first-name" class="col-md-4 control-label">First Name:</label>
+                    <div class="col-md-8">
+                        <input type="text"
+                               class="form-control"
+                               id="add-first-name"
+                               placeholder="First Name" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="add-last-name" class="col-md-4 control-label">Last Name:</label>
+                    <div class="col-md-8">
+                        <input type="text"
+                               class="form-control"
+                               id="add-last-name"
+                               placeholder="Last Name" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="add-phone" class="col-md-4 control-label">Phone:</label>
+                    <div class="col-md-8">
+                        <input type="tel"
+                               class="form-control"
+                               id="add-phone"
+                               placeholder="Phone" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="add-email" class="col-md-4 control-label">Email:</label>
+                    <div class="col-md-8">
+                        <input type="email"
+                               class="form-control"
+                               id="add-email"
+                               placeholder="Email" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-4 col-md-8">
+                        <button type="button"
+                                id="add-button"
+                                onclick="addContact()"
+                                class="btn btn-default">
+                            Add Contact
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+
+    <script src="../Scripts/jquery-2.2.4.min.js"></script>
+    <script src="../Scripts/bootstrap.js"></script>
+    <script src="../Scripts/addContact.js"></script>
+</body>
+</html>

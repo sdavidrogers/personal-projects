@@ -1,0 +1,65 @@
+﻿@model List<ContactListMVC.Models.Contact>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Contact List</title>
+    <link href="~/Content/CSS/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+
+
+        <h1 class="text-center">
+            Contact List
+        </h1>
+        <hr/>
+
+        <div class="col-md-12">
+            <div class="col-md-10">
+                <h2>Contacts</h2>
+            </div>
+            <div class="col-md-2">
+                @using (Html.BeginForm("DisplayAddContact", "Contact", FormMethod.Get))
+                {
+                    <button type="submit" class="btn btn-primary">Add Contact</button>
+                }
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th width="26%" class="text-center">Name</th>
+                        <th width="26%" class="text-center">Phone</th>
+                        <th width="26%" class="text-center">Email</th>
+                        <th width="11%" class="text-center"></th>
+                        <th width="11%" class="text-center"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var contact in Model)
+                    {
+                    <tr>
+                        <td class="text-center">@contact.LastName, @contact.FirstName</td>
+                        <td class="text-center">@contact.PhoneNumber</td>
+                        <td class="text-center">@contact.Email</td>
+                        <td class="text-center">@Html.ActionLink("Edit", "DisplayEditContact", "Contact", new { id = contact.ContactID }, null)</td>
+                        <td class="text-center">@Html.ActionLink("Delete", "DeleteContact", "Contact", new { id = contact.ContactID }, null)</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+</body>
+</html>
