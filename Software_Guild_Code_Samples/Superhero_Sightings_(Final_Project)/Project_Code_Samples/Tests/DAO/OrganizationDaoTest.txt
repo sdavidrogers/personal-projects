@@ -1,0 +1,161 @@
+package com.sg.superherosightings.dao;
+
+import com.sg.superherosightings.dto.Organization;
+import com.sg.superherosightings.dto.Super;
+import com.sg.superherosightings.dto.SuperOrganization;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.After;
+import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+
+public class OrganizationDaoJdbcImplTest {
+    
+    OrganizationDao organizationDao;
+    SuperDao superDao;
+    SuperOrganizationDao superOrganizationDao;
+    
+    public OrganizationDaoJdbcImplTest() {
+        ApplicationContext ctx 
+                = new ClassPathXmlApplicationContext("test-applicationContext.xml");
+        organizationDao = ctx.getBean("organizationDao", OrganizationDao.class);
+        superDao = ctx.getBean("superDao", SuperDao.class);
+        superOrganizationDao = ctx.getBean("superOrganizationDao", SuperOrganizationDao.class);
+    }
+    
+    @BeforeClass
+    public static void setUpClass() {
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+    }
+    
+    @Before
+    public void setUp() {
+        superOrganizationDao.deleteAllPairs();
+        
+        for (Organization currentOrganization : organizationDao.getAllOrganizations()) {
+            organizationDao.removeOrganization(currentOrganization.getOrganizationId());
+        }
+        
+        for (Super currentSuper : superDao.getAllSupers()) {
+            superDao.removeSuper(currentSuper.getSuperId());
+        }
+    }
+    
+    @After
+    public void tearDown() {
+        superOrganizationDao.deleteAllPairs();
+        
+        for (Organization currentOrganization : organizationDao.getAllOrganizations()) {
+            organizationDao.removeOrganization(currentOrganization.getOrganizationId());
+        }
+        
+        for (Super currentSuper : superDao.getAllSupers()) {
+            superDao.removeSuper(currentSuper.getSuperId());
+        }
+    }
+    
+    @Test
+    public void addGetOrganization() {
+        Organization organization = new Organization();
+        organization.setOrganizationName("The Bad Guys");
+        organization.setDescription("Group for bad guys.");
+        organization.setAddress("666 Bad Boy Lane");
+        organization.setPhone("330-612-8177");
+        
+        organization = organizationDao.addOrganization(organization);
+        assertEquals(organization, organizationDao.getOrganizationById(organization.getOrganizationId()));
+    }
+    
+    @Test
+    public void deleteOrganization() {
+        Organization organization = new Organization();
+        organization.setOrganizationName("The Bad Guys");
+        organization.setDescription("Group for bad guys.");
+        organization.setAddress("666 Bad Boy Lane");
+        organization.setPhone("330-612-8177");
+        
+        organization = organizationDao.addOrganization(organization);
+        assertEquals(organization, organizationDao.getOrganizationById(organization.getOrganizationId()));
+        organizationDao.removeOrganization(organization.getOrganizationId());
+        assertNull(organizationDao.getOrganizationById(organization.getOrganizationId()));
+    }
+    
+    @Test
+    public void updateOrganization() {
+        Organization organization = new Organization();
+        organization.setOrganizationName("The Bad Guys");
+        organization.setDescription("Group for bad guys.");
+        organization.setAddress("666 Bad Boy Lane");
+        organization.setPhone("330-612-8177");
+        
+        organization = organizationDao.addOrganization(organization);
+        organization.setOrganizationName("The Really Bad Guys");
+        organizationDao.updateOrganization(organization);
+        assertEquals(organization, organizationDao.getOrganizationById(organization.getOrganizationId()));
+    }
+    
+    @Test
+    public void getAllOrganzations() {
+        Organization organization = new Organization();
+        organization.setOrganizationName("The Bad Guys");
+        organization.setDescription("Group for bad guys.");
+        organization.setAddress("666 Bad Boy Lane");
+        organization.setPhone("330-612-8177");
+        organizationDao.addOrganization(organization);
+        
+        Organization organizationTwo = new Organization();
+        organizationTwo.setOrganizationName("The Good Guys");
+        organizationTwo.setDescription("Group for good guys.");
+        organizationTwo.setAddress("667 Good Boy Lane");
+        organizationTwo.setPhone("330-612-8178");
+        organizationDao.addOrganization(organizationTwo);
+        
+        assertEquals(2, organizationDao.getAllOrganizations().size());
+    }
+
+    @Test
+    public void getAllOrganizationsForSuper() {
+        List<Organization> organizations = new ArrayList<>();
+        SuperOrganization superOrganization = new SuperOrganization();
+        
+        Super addSuper = new Super();
+        addSuper.setAlias("Bad Boy");
+        addSuper.setSuperType("Villain");
+        addSuper.setDescription("One bad boy.");
+        addSuper = superDao.addSuper(addSuper);
+        superOrganization.setSuper(addSuper);
+        
+        Organization organization = new Organization();
+        organization.setOrganizationName("The Bad Guys");
+        organization.setDescription("Group for bad guys.");
+        organization.setAddress("666 Bad Boy Lane");
+        organization.setPhone("330-612-8177");
+        organization = organizationDao.addOrganization(organization);
+        organizations.add(organization);
+        superOrganization.setOrganization(organization);
+        superOrganizationDao.addSuperOrganizationPair(superOrganization);
+        
+        Organization organizationTwo = new Organization();
+        organizationTwo.setOrganizationName("The Good Guys");
+        organizationTwo.setDescription("Group for good guys.");
+        organizationTwo.setAddress("667 Good Boy Lane");
+        organizationTwo.setPhone("330-612-8178");
+        organizationTwo = organizationDao.addOrganization(organizationTwo);
+        organizations.add(organizationTwo);
+        superOrganization.setOrganization(organizationTwo);
+        superOrganizationDao.addSuperOrganizationPair(superOrganization);
+        
+        assertEquals(organizations, organizationDao.getAllOrganizationsForSuper(addSuper.getSuperId()));
+    }
+    
+}

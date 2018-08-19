@@ -1,0 +1,61 @@
+package com.sg.superherosightings.dto;
+
+import java.util.Objects;
+
+
+public class SuperSighting {
+    
+    private Super pairedSuper;
+    private Sighting sighting;
+
+    public Super getSuper() {
+        return pairedSuper;
+    }
+
+    public void setSuper(Super pairedSuper) {
+        this.pairedSuper = pairedSuper;
+    }
+
+    public Sighting getSighting() {
+        return sighting;
+    }
+
+    public void setSighting(Sighting sighting) {
+        this.sighting = sighting;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 17 * hash + Objects.hashCode(this.pairedSuper);
+        hash = 17 * hash + Objects.hashCode(this.sighting);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final SuperSighting other = (SuperSighting) obj;
+        if (!Objects.equals(this.pairedSuper, other.pairedSuper)) {
+            return false;
+        }
+        if (!Objects.equals(this.sighting, other.sighting)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "SuperSighting{" + "pairedSuper=" + pairedSuper + ", sighting=" + sighting + '}';
+    }
+    
+}

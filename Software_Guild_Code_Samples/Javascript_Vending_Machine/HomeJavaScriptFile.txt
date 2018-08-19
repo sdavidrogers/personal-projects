@@ -1,0 +1,167 @@
+$(document).ready(function () {
+
+
+
+  loadItems();
+
+
+
+  $('#add-dollar').click(function(event) {
+    addMoney(1);
+  });
+
+
+
+  $('#add-quarter').click(function(event) {
+    addMoney(.25);
+  });
+
+
+
+  $('#add-dime').click(function(event) {
+    addMoney(.1);
+  });
+
+
+
+  $('#add-nickel').click(function(event) {
+    addMoney(.05);
+  });
+
+
+
+  $('#change-button').click(function(event) {
+    $('#itemID').empty();
+    $('#changeLabel').empty();
+    $('#messageLabel').empty();
+
+    var pennies = parseFloat($('#depositVal').text().replace('$', ''));
+
+    if (pennies > 0) {
+      var quarters = Math.floor(pennies / .25);
+      pennies = Math.ceil((pennies % .25) * 100) / 100;
+      var dimes = Math.floor(pennies / .1);
+      pennies = Math.ceil((pennies % .1) * 100) / 100;
+      var nickels = Math.floor(pennies / .05);
+
+      $('#changeLabel').text('Quarters: ' + quarters + ' -- Dimes: ' + dimes + ' -- Nickels: ' + nickels);
+      $('#depositVal').text('$0.00');
+    } else {
+      $('#changeLabel').text('No money deposited.');
+    }
+  });
+
+
+
+  $('#make-purchase').click(function(event) {
+    $('#changeLabel').empty();
+    $('#messageLabel').empty();
+
+    var money = $('#depositVal').text().replace('$', '');
+    var item = $('#itemID').text();
+    if (item === '') {
+      $('#messageLabel').text('No item selected.');
+      return false;
+    }
+    $.ajax({
+      type: 'GET',
+      url: 'http://localhost:8080/money/' + money + '/item/' + item,
+      success: function(change) {
+        $('#depositVal').text('$0.00');
+
+        for (i = 0; i < parseInt(change.quarters); i++) {
+          addMoney(.25);
+        }
+
+        for (i = 0; i < parseInt(change.dimes); i++) {
+          addMoney(.1);
+        }
+
+        for (i = 0; i < parseInt(change.nickels); i++) {
+          addMoney(.05);
+        }
+
+        $('#messageLabel').text('Thank You!');
+
+        $('#itemID').empty();
+        $('#itemGrid').empty();
+        loadItems();
+      },
+      error: function(error) {
+        if (error.status == 422) {
+          $('#errorMessages').empty();
+          $('#messageLabel').text(error.responseJSON.message);
+        } else {
+          $('#errorMessages').empty();
+          $('#errorMessages')
+            .append($('<li>')
+            .attr({class: 'list-group-item list-group-item-danger'})
+            .text('Error calling web service. Could not complete purchase. Please try again later.'));
+        }
+      }
+    });
+  });
+
+
+
+});
+
+
+
+
+
+function loadItems() {
+  var itemGrid = $('#itemGrid');
+  $.ajax({
+    type: 'GET',
+    url: 'http://localhost:8080/items',
+    success: function(itemArray) {
+      $.each(itemArray, function(index, item) {
+        var id = item.id;
+        var name = item.name;
+        var price = item.price;
+        var quantity = item.quantity;
+        var item = '<button type="button" class="btn btn-default col-md-4" id="itemNum' + id + '" onclick="selectItem(' + id + ')">';
+            item += '<br/><br/><div class="col-md-12">#' + id + '</div><br/><br/>';
+            item += '<div class="col-md-12">' + name + '</div>';
+            item += '<div class="col-md-12">$' + price.toFixed(2) + '</div><br/><br/>';
+            item += '<div class="col-md-12">Quantity: ' + quantity + '</div><br/><br/><br/><br/>';
+            item += '</button>';
+        itemGrid.append(item);
+      });
+    },
+    error: function() {
+      $('#errorMessages').empty();
+      $('#errorMessages')
+        .append($('<li>')
+        .attr({class: 'list-group-item list-group-item-danger'})
+        .text('Error calling web service. Could not load items. Please try again later.'));
+    }
+  });
+}
+
+
+
+
+
+function addMoney(addVal) {
+  $('#changeLabel').empty();
+  $('#messageLabel').empty();
+
+  var oldVal = $('#depositVal').text().replace('$', '');
+  var newVal = +oldVal + +addVal;
+
+  $('#depositVal').empty();
+  $('#depositVal').text('$' + newVal.toFixed(2));
+}
+
+
+
+
+
+function selectItem(idNum) {
+  $('#changeLabel').empty();
+  $('#messageLabel').empty();
+
+  $('#itemID').text(idNum);
+}

@@ -1,0 +1,123 @@
+package com.sg.superherosightings.dao;
+
+import com.sg.superherosightings.dto.Power;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+
+public class PowerDaoJdbcImpl implements PowerDao {
+    
+    
+    
+    private static final String SQL_INSERT_POWER
+            = "insert into Powers "
+            + "(PowerName, Description) "
+            + "values (?, ?)";
+    
+    private static final String SQL_DELETE_POWER
+            = "delete from Powers where PowerID = ?";
+    
+    private static final String SQL_SELECT_POWER
+            = "select * from Powers where PowerID = ?";
+    
+    private static final String SQL_UPDATE_POWER
+            = "update Powers set "
+            + "PowerName = ?, Description = ? "
+            + "where PowerID = ?";
+    
+    private static final String SQL_SELECT_ALL_POWERS
+            = "select * from Powers";
+    
+    private static final String SQL_SELECT_POWERS_BY_SUPER
+            = "select sp.PowerID, p.PowerName, p.Description " 
+            + "from SupersAndPowers sp "
+            + "inner join Powers p "
+            + "on sp.PowerID = p.PowerID "
+            + "where SuperID = ?";
+    
+    
+    
+    private JdbcTemplate jdbcTemplate;
+
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    
+    
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    public Power addPower(Power power) {
+        jdbcTemplate.update(SQL_INSERT_POWER,
+                power.getPowerName(),
+                power.getDescription());
+        int newId = jdbcTemplate.queryForObject("select LAST_INSERT_ID()", Integer.class);
+        power.setPowerId(newId);
+        return power;
+    }
+
+    
+    
+    @Override
+    public void removePower(long powerId) {
+        jdbcTemplate.update(SQL_DELETE_POWER, powerId);
+    }
+
+    
+    
+    @Override
+    public void updatePower(Power power) {
+        jdbcTemplate.update(SQL_UPDATE_POWER,
+                power.getPowerName(),
+                power.getDescription(),
+                power.getPowerId());
+    }
+
+    
+    
+    @Override
+    public List<Power> getAllPowers() {
+        return jdbcTemplate.query(SQL_SELECT_ALL_POWERS, 
+                new PowerMapper());
+    }
+
+    
+    
+    @Override
+    public Power getPowerById(long powerId) {
+        try {
+            return jdbcTemplate.queryForObject(SQL_SELECT_POWER,
+                    new PowerMapper(), powerId);
+        } catch (EmptyResultDataAccessException ex) {
+            return null;
+        }
+    }
+
+    
+    
+    @Override
+    public List<Power> getAllPowersForSuper(long superId) {
+        return jdbcTemplate.query(SQL_SELECT_POWERS_BY_SUPER, 
+                new PowerMapper(), superId);
+    }
+    
+    
+    
+    private static final class PowerMapper implements RowMapper<Power> {
+        @Override
+        public Power mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Power power = new Power();
+            power.setPowerId(rs.getLong("PowerID"));
+            power.setPowerName(rs.getString("PowerName"));
+            power.setDescription(rs.getString("Description"));
+            return power;
+        }
+    }
+    
+}

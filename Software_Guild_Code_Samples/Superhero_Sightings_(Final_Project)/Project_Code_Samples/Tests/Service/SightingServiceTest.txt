@@ -1,0 +1,243 @@
+package com.sg.superherosightings.service;
+
+import com.sg.superherosightings.dto.Location;
+import com.sg.superherosightings.dto.Sighting;
+import com.sg.superherosightings.dto.Super;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.After;
+import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+
+public class SightingServiceJdbcImplTest {
+    
+    private SightingService sightingService;
+    private SuperService superService;
+    private LocationService locationService;
+    
+    public SightingServiceJdbcImplTest() {
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("test-applicationContext.xml");
+        sightingService = ctx.getBean("sightingService", SightingService.class);
+        superService = ctx.getBean("superService", SuperService.class);
+        locationService = ctx.getBean("locationService", LocationService.class);
+    }
+    
+    @BeforeClass
+    public static void setUpClass() {
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+    }
+    
+    @Before
+    public void setUp() {
+        for (Sighting currentSighting : sightingService.getAllSightings()) {
+            sightingService.removeSighting(currentSighting.getSightingId());
+        }
+        
+        for (Super currentSuper : superService.getAllSupers()) {
+            superService.removeSuper(currentSuper.getSuperId());
+        }
+        
+        for (Location currentLocation : locationService.getAllLocations()) {
+            locationService.removeLocation(currentLocation.getLocationId());
+        }
+    }
+    
+    @After
+    public void tearDown() {
+        for (Sighting currentSighting : sightingService.getAllSightings()) {
+            sightingService.removeSighting(currentSighting.getSightingId());
+        }
+        
+        for (Super currentSuper : superService.getAllSupers()) {
+            superService.removeSuper(currentSuper.getSuperId());
+        }
+        
+        for (Location currentLocation : locationService.getAllLocations()) {
+            locationService.removeLocation(currentLocation.getLocationId());
+        }
+    }
+
+    @Test
+    public void testAddGetSighting() {
+        Location location = new Location();
+        location.setLocationName("My house");
+        location.setDescription("My beautiful house");
+        location.setAddress("4059 St. Clair Avenue");
+        location.setLatitude(10);
+        location.setLongitude(8);
+        location = locationService.addLocation(location);
+        
+        Sighting sighting = new Sighting();
+        sighting.setLocation(location);
+        sighting.setSightingDate(LocalDate.parse("1991-11-08"));
+        sighting = sightingService.addSighting(sighting);
+        
+        Sighting sightingCheck = sightingService.getSightingById(sighting.getSightingId());
+        sightingCheck.setLocation(locationService.getLocationById(sightingCheck.getLocation().getLocationId()));
+        
+        assertEquals(sighting, sightingCheck);
+    }
+
+    @Test
+    public void testRemoveSighting() {
+        Location location = new Location();
+        location.setLocationName("My house");
+        location.setDescription("My beautiful house");
+        location.setAddress("4059 St. Clair Avenue");
+        location.setLatitude(10);
+        location.setLongitude(8);
+        location = locationService.addLocation(location);
+        
+        Sighting sighting = new Sighting();
+        sighting.setLocation(location);
+        sighting.setSightingDate(LocalDate.parse("1991-11-08"));
+        sighting = sightingService.addSighting(sighting);
+        
+        Sighting sightingCheck = sightingService.getSightingById(sighting.getSightingId());
+        sightingCheck.setLocation(locationService.getLocationById(sightingCheck.getLocation().getLocationId()));
+        
+        assertEquals(sighting, sightingCheck);
+        
+        sightingService.removeSighting(sighting.getSightingId());
+        assertNull(sightingService.getSightingById(sighting.getSightingId()));
+    }
+
+    @Test
+    public void testUpdateSighting() {
+        Location location = new Location();
+        location.setLocationName("My house");
+        location.setDescription("My beautiful house");
+        location.setAddress("4059 St. Clair Avenue");
+        location.setLatitude(10);
+        location.setLongitude(8);
+        location = locationService.addLocation(location);
+        
+        Sighting sighting = new Sighting();
+        sighting.setLocation(location);
+        sighting.setSightingDate(LocalDate.parse("1991-11-08"));
+        sighting = sightingService.addSighting(sighting);
+        
+        sighting.setSightingDate(LocalDate.parse("1990-02-22"));
+        sightingService.updateSighting(sighting);
+        
+        Sighting sightingCheck = sightingService.getSightingById(sighting.getSightingId());
+        sightingCheck.setLocation(locationService.getLocationById(sightingCheck.getLocation().getLocationId()));
+        
+        assertEquals(sighting, sightingCheck);
+    }
+
+    @Test
+    public void testGetAllSightings() {
+        Location location = new Location();
+        location.setLocationName("My house");
+        location.setDescription("My beautiful house");
+        location.setAddress("4059 St. Clair Avenue");
+        location.setLatitude(10);
+        location.setLongitude(8);
+        location = locationService.addLocation(location);
+        
+        Sighting sighting = new Sighting();
+        sighting.setLocation(location);
+        sighting.setSightingDate(LocalDate.parse("1991-11-08"));
+        sightingService.addSighting(sighting);
+        
+        Sighting sightingTwo = new Sighting();
+        sightingTwo.setLocation(location);
+        sightingTwo.setSightingDate(LocalDate.parse("1991-11-09"));
+        sightingService.addSighting(sightingTwo);
+
+        assertEquals(2, sightingService.getAllSightings().size());
+    }
+
+    @Test
+    public void testGetAllSightingsFromDate() {
+        Location location = new Location();
+        location.setLocationName("My house");
+        location.setDescription("My beautiful house");
+        location.setAddress("4059 St. Clair Avenue");
+        location.setLatitude(10);
+        location.setLongitude(8);
+        location = locationService.addLocation(location);
+        
+        Sighting sighting = new Sighting();
+        sighting.setLocation(location);
+        sighting.setSightingDate(LocalDate.parse("1991-11-08"));
+        sightingService.addSighting(sighting);
+        
+        Sighting sightingTwo = new Sighting();
+        sightingTwo.setLocation(location);
+        sightingTwo.setSightingDate(LocalDate.parse("1991-11-08"));
+        sightingService.addSighting(sightingTwo);
+        
+        assertEquals(2, sightingService.getAllSightingsFromDate(LocalDate.parse("1991-11-08")).size());
+    }
+
+    @Test
+    public void testGetAllSightingsWithSuper() {
+        List<Super> supers = new ArrayList<>();
+        
+        Super addSuper = new Super();
+        addSuper.setAlias("Bad Boy");
+        addSuper.setSuperType("Villain");
+        addSuper.setDescription("One bad boy.");
+        addSuper = superService.addSuper(addSuper);
+        supers.add(addSuper);
+        
+        Location location = new Location();
+        location.setLocationName("My house");
+        location.setDescription("My beautiful house");
+        location.setAddress("4059 St. Clair Avenue");
+        location.setLatitude(10);
+        location.setLongitude(8);
+        location = locationService.addLocation(location);
+        
+        Sighting sighting = new Sighting();
+        sighting.setLocation(location);
+        sighting.setSightingDate(LocalDate.parse("1991-11-08"));
+        sighting.setSupers(supers);
+        sightingService.addSighting(sighting);
+        
+        Sighting sightingTwo = new Sighting();
+        sightingTwo.setLocation(location);
+        sightingTwo.setSightingDate(LocalDate.parse("1991-11-09"));
+        sightingTwo.setSupers(supers);
+        sightingService.addSighting(sightingTwo);
+        
+        assertEquals(2, sightingService.getAllSightingsWithSuper(addSuper.getSuperId()).size());
+    }
+
+    @Test
+    public void testGetAllSightingsFromLocation() {
+        Location location = new Location();
+        location.setLocationName("My house");
+        location.setDescription("My beautiful house");
+        location.setAddress("4059 St. Clair Avenue");
+        location.setLatitude(10);
+        location.setLongitude(8);
+        location = locationService.addLocation(location);
+        
+        Sighting sighting = new Sighting();
+        sighting.setLocation(location);
+        sighting.setSightingDate(LocalDate.parse("1991-11-08"));
+        sightingService.addSighting(sighting);
+        
+        Sighting sightingTwo = new Sighting();
+        sightingTwo.setLocation(location);
+        sightingTwo.setSightingDate(LocalDate.parse("1991-11-09"));
+        sightingService.addSighting(sightingTwo);
+        
+        assertEquals(2, sightingService.getAllSightingsFromLocation(location.getLocationId()).size());
+    }
+    
+}

@@ -1,0 +1,316 @@
+package com.sg.superherosightings.dao;
+
+import com.sg.superherosightings.dto.Location;
+import com.sg.superherosightings.dto.Organization;
+import com.sg.superherosightings.dto.Power;
+import com.sg.superherosightings.dto.Sighting;
+import com.sg.superherosightings.dto.Super;
+import com.sg.superherosightings.dto.SuperOrganization;
+import com.sg.superherosightings.dto.SuperPower;
+import com.sg.superherosightings.dto.SuperSighting;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.After;
+import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+
+public class SuperDaoJdbcImplTest {
+    
+    SuperDao superDao;
+    PowerDao powerDao;
+    OrganizationDao organizationDao;
+    LocationDao locationDao;
+    SightingDao sightingDao;
+    SuperPowerDao superPowerDao;
+    SuperOrganizationDao superOrganizationDao;
+    SuperSightingDao superSightingDao;
+    
+    public SuperDaoJdbcImplTest() {
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("test-applicationContext.xml");
+        locationDao = ctx.getBean("locationDao", LocationDao.class);
+        powerDao = ctx.getBean("powerDao", PowerDao.class);
+        organizationDao = ctx.getBean("organizationDao", OrganizationDao.class);
+        superDao = ctx.getBean("superDao", SuperDao.class);
+        sightingDao = ctx.getBean("sightingDao", SightingDao.class);
+        superSightingDao = ctx.getBean("superSightingDao", SuperSightingDao.class);
+        superOrganizationDao = ctx.getBean("superOrganizationDao", SuperOrganizationDao.class);
+        superPowerDao = ctx.getBean("superPowerDao", SuperPowerDao.class);
+    }
+    
+    @BeforeClass
+    public static void setUpClass() {
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+    }
+    
+    @Before
+    public void setUp() {
+        superPowerDao.deleteAllPairs();
+        superSightingDao.deleteAllPairs();
+        superOrganizationDao.deleteAllPairs();
+        
+        for (Super currentSuper : superDao.getAllSupers()) {
+            superDao.removeSuper(currentSuper.getSuperId());
+        }
+        
+        for (Power currentPower : powerDao.getAllPowers()) {
+            powerDao.removePower(currentPower.getPowerId());
+        }
+        
+        for (Organization currentOrganization: organizationDao.getAllOrganizations()) {
+            organizationDao.removeOrganization(currentOrganization.getOrganizationId());
+        }
+        
+        for (Sighting currentSighting : sightingDao.getAllSightings()) {
+            sightingDao.removeSighting(currentSighting.getSightingId());
+        }
+        
+        for (Location currentLocation : locationDao.getAllLocations()) {
+            locationDao.removeLocation(currentLocation.getLocationId());
+        }
+    }
+    
+    @After
+    public void tearDown() {
+        superPowerDao.deleteAllPairs();
+        superSightingDao.deleteAllPairs();
+        superOrganizationDao.deleteAllPairs();
+        
+        for (Super currentSuper : superDao.getAllSupers()) {
+            superDao.removeSuper(currentSuper.getSuperId());
+        }
+        
+        for (Power currentPower : powerDao.getAllPowers()) {
+            powerDao.removePower(currentPower.getPowerId());
+        }
+        
+        for (Organization currentOrganization: organizationDao.getAllOrganizations()) {
+            organizationDao.removeOrganization(currentOrganization.getOrganizationId());
+        }
+        
+        for (Sighting currentSighting : sightingDao.getAllSightings()) {
+            sightingDao.removeSighting(currentSighting.getSightingId());
+        }
+        
+        for (Location currentLocation : locationDao.getAllLocations()) {
+            locationDao.removeLocation(currentLocation.getLocationId());
+        }
+    }
+    
+    @Test
+    public void addGetSuper() {
+        Super addSuper = new Super();
+        addSuper.setAlias("Bad Boy");
+        addSuper.setSuperType("Villain");
+        addSuper.setDescription("One bad boy.");
+        
+        addSuper = superDao.addSuper(addSuper);    
+        Super retrievedSuper = superDao.getSuperById(addSuper.getSuperId());
+        assertEquals(addSuper, retrievedSuper);
+    }
+    
+    @Test
+    public void deleteSuper() {
+        Super addSuper = new Super();
+        addSuper.setAlias("Bad Boy");
+        addSuper.setSuperType("Villain");
+        addSuper.setDescription("One bad boy.");
+        
+        addSuper = superDao.addSuper(addSuper);
+        Super retrievedSuper = superDao.getSuperById(addSuper.getSuperId());
+        assertEquals(addSuper, retrievedSuper);
+        
+        superDao.removeSuper(addSuper.getSuperId());
+        assertNull(superDao.getSuperById(addSuper.getSuperId()));
+    }
+    
+    @Test
+    public void updateSuper() {
+        Super addSuper = new Super();
+        addSuper.setAlias("Bad Boy");
+        addSuper.setSuperType("Villain");
+        addSuper.setDescription("One bad boy.");
+        
+        addSuper = superDao.addSuper(addSuper);
+        addSuper.setAlias("Very Bad Boy");
+        superDao.updateSuper(addSuper);
+        Super retrievedSuper = superDao.getSuperById(addSuper.getSuperId());
+        assertEquals(addSuper, retrievedSuper);
+    }
+    
+    @Test
+    public void getAllSupers() {
+        Super addSuper = new Super();
+        addSuper.setAlias("Bad Boy");
+        addSuper.setSuperType("Villain");
+        addSuper.setDescription("One bad boy.");
+        
+        superDao.addSuper(addSuper);
+        
+        Super secondSuper = new Super();
+        secondSuper.setAlias("Good Boy");
+        secondSuper.setSuperType("Hero");
+        secondSuper.setDescription("One good boy.");
+        
+        superDao.addSuper(secondSuper);
+        
+        assertEquals(2, superDao.getAllSupers().size());
+    }
+
+    @Test
+    public void testGetAllSupersFromLocation() {
+        List<Super> supersCheck = new ArrayList<>();
+        SuperSighting superSighting = new SuperSighting();
+        
+        Location location = new Location();
+        location.setLocationName("My house");
+        location.setDescription("My beautiful house");
+        location.setAddress("4059 St. Clair Avenue");
+        location.setLatitude(10);
+        location.setLongitude(8);
+        location = locationDao.addLocation(location);
+        
+        Sighting sighting = new Sighting();
+        sighting.setLocation(location);
+        sighting.setSightingDate(LocalDate.parse("1991-11-08"));
+        sighting = sightingDao.addSighting(sighting);
+        superSighting.setSighting(sighting);
+        
+        Super addSuper = new Super();
+        addSuper.setAlias("Bad Boy");
+        addSuper.setSuperType("Villain");
+        addSuper.setDescription("One bad boy.");
+        addSuper = superDao.addSuper(addSuper);
+        supersCheck.add(addSuper);
+        superSighting.setSuper(addSuper);
+        superSightingDao.addSuperSightingPair(superSighting);
+        
+        Super secondSuper = new Super();
+        secondSuper.setAlias("Good Boy");
+        secondSuper.setSuperType("Hero");
+        secondSuper.setDescription("One good boy.");
+        secondSuper = superDao.addSuper(secondSuper);
+        supersCheck.add(secondSuper);
+        superSighting.setSuper(secondSuper);
+        superSightingDao.addSuperSightingPair(superSighting);
+        
+        assertEquals(supersCheck, superDao.getAllSupersFromLocation(location.getLocationId()));
+    }
+
+    @Test
+    public void testGetAllSupersFromOrganization() {
+        List<Super> supers = new ArrayList<>();
+        SuperOrganization superOrganization = new SuperOrganization();
+        
+        Organization organization = new Organization();
+        organization.setOrganizationName("The Bad Guys");
+        organization.setDescription("Group for bad guys.");
+        organization.setAddress("666 Bad Boy Lane");
+        organization.setPhone("330-612-8177");
+        organization = organizationDao.addOrganization(organization);
+        superOrganization.setOrganization(organization);
+        
+        Super addSuper = new Super();
+        addSuper.setAlias("Bad Boy");
+        addSuper.setSuperType("Villain");
+        addSuper.setDescription("One bad boy.");
+        addSuper = superDao.addSuper(addSuper);
+        supers.add(addSuper);
+        superOrganization.setSuper(addSuper);
+        superOrganizationDao.addSuperOrganizationPair(superOrganization);
+        
+        Super secondSuper = new Super();
+        secondSuper.setAlias("Good Boy");
+        secondSuper.setSuperType("Hero");
+        secondSuper.setDescription("One good boy.");
+        secondSuper = superDao.addSuper(secondSuper);
+        supers.add(secondSuper);
+        superOrganization.setSuper(secondSuper);
+        superOrganizationDao.addSuperOrganizationPair(superOrganization);
+        
+        assertEquals(supers, superDao.getAllSupersFromOrganization(organization.getOrganizationId()));
+    }
+
+    @Test
+    public void testGetAllSupersWithPower() {
+        List<Super> supers = new ArrayList<>();
+        SuperPower superPower = new SuperPower();
+        
+        Power power = new Power();
+        power.setPowerName("Flight");
+        power.setDescription("They can fly.");
+        power = powerDao.addPower(power);
+        superPower.setPower(power);
+        
+        Super addSuper = new Super();
+        addSuper.setAlias("Bad Boy");
+        addSuper.setSuperType("Villain");
+        addSuper.setDescription("One bad boy.");
+        addSuper = superDao.addSuper(addSuper);
+        supers.add(addSuper);
+        superPower.setSuper(addSuper);
+        superPowerDao.addSuperPowerPair(superPower);
+        
+        Super secondSuper = new Super();
+        secondSuper.setAlias("Good Boy");
+        secondSuper.setSuperType("Hero");
+        secondSuper.setDescription("One good boy.");
+        secondSuper = superDao.addSuper(secondSuper);
+        supers.add(secondSuper);
+        superPower.setSuper(secondSuper);
+        superPowerDao.addSuperPowerPair(superPower);
+        
+        assertEquals(supers, superDao.getAllSupersWithPower(power.getPowerId()));
+    }
+
+    @Test
+    public void testGetAllSupersFromSighting() {
+        List<Super> supers = new ArrayList<>();
+        SuperSighting superSighting = new SuperSighting();
+        
+        Location location = new Location();
+        location.setLocationName("My house");
+        location.setDescription("My beautiful house");
+        location.setAddress("4059 St. Clair Avenue");
+        location.setLatitude(10);
+        location.setLongitude(8);
+        location = locationDao.addLocation(location);
+        
+        Sighting sighting = new Sighting();
+        sighting.setLocation(location);
+        sighting.setSightingDate(LocalDate.parse("1991-11-08"));
+        sighting = sightingDao.addSighting(sighting);
+        superSighting.setSighting(sighting);
+        
+        Super addSuper = new Super();
+        addSuper.setAlias("Bad Boy");
+        addSuper.setSuperType("Villain");
+        addSuper.setDescription("One bad boy.");
+        addSuper = superDao.addSuper(addSuper);
+        supers.add(addSuper);
+        superSighting.setSuper(addSuper);
+        superSightingDao.addSuperSightingPair(superSighting);
+        
+        Super secondSuper = new Super();
+        secondSuper.setAlias("Good Boy");
+        secondSuper.setSuperType("Hero");
+        secondSuper.setDescription("One good boy.");
+        secondSuper = superDao.addSuper(secondSuper);
+        supers.add(secondSuper);
+        superSighting.setSuper(secondSuper);
+        superSightingDao.addSuperSightingPair(superSighting);
+        
+        assertEquals(supers, superDao.getAllSupersFromSighting(sighting.getSightingId()));
+    }
+    
+}

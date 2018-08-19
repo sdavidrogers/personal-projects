@@ -1,0 +1,89 @@
+package com.sg.superherosightings.service;
+
+import com.sg.superherosightings.dao.PowerDao;
+import com.sg.superherosightings.dao.SuperDao;
+import com.sg.superherosightings.dao.SuperPowerDao;
+import com.sg.superherosightings.dto.Power;
+import java.util.List;
+import javax.inject.Inject;
+
+
+public class PowerServiceJdbcImpl implements PowerService {
+    
+    
+    
+    private final PowerDao powerDao;
+    private final SuperDao superDao;
+    private final SuperPowerDao superPowerDao;
+    
+    
+    
+    @Inject
+    public PowerServiceJdbcImpl(PowerDao powerDao, SuperDao superDao, 
+            SuperPowerDao superPowerDao) {
+        this.powerDao = powerDao;
+        this.superDao = superDao;
+        this.superPowerDao = superPowerDao;
+    }
+
+    
+    
+    @Override
+    public Power addPower(Power power) {
+        power.setPowerId(powerDao.addPower(power).getPowerId());
+        return power;
+    }
+
+    
+    
+    @Override
+    public void removePower(long powerId) {
+        superPowerDao.deletePairsByPower(powerId);
+        powerDao.removePower(powerId);
+    }
+
+    
+    
+    @Override
+    public void updatePower(Power power) {
+        powerDao.updatePower(power);
+    }
+
+    
+    
+    @Override
+    public List<Power> getAllPowers() {
+        List<Power> powers = powerDao.getAllPowers();
+        for (Power currentPower : powers) {
+            currentPower.setSupersWithPower(superDao
+                    .getAllSupersWithPower(currentPower.getPowerId()));
+        }
+        return powers;
+    }
+
+    
+    
+    @Override
+    public Power getPowerById(long powerId) {
+        Power power = powerDao.getPowerById(powerId);
+        if (power != null) {
+            power.setSupersWithPower(superDao.getAllSupersWithPower(powerId));
+        }
+        return power;
+    }
+
+    
+    
+    @Override
+    public List<Power> getAllPowersForSuper(long superId) {
+        List<Power> powersForSuper = powerDao.getAllPowersForSuper(superId);
+        for (Power currentPower : powersForSuper) {
+            currentPower.setSupersWithPower(superDao
+                    .getAllSupersWithPower(currentPower.getPowerId()));
+        }
+        return powersForSuper;
+    }
+    
+    
+    
+}

@@ -1,0 +1,148 @@
+package com.sg.superherosightings.dao;
+
+import com.sg.superherosightings.dto.Power;
+import com.sg.superherosightings.dto.Super;
+import com.sg.superherosightings.dto.SuperPower;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.After;
+import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+
+public class PowerDaoJdbcImplTest {
+    
+    PowerDao powerDao;
+    SuperDao superDao;
+    SuperPowerDao superPowerDao;
+    
+    public PowerDaoJdbcImplTest() {
+        ApplicationContext ctx 
+                = new ClassPathXmlApplicationContext("test-applicationContext.xml");
+        powerDao = ctx.getBean("powerDao", PowerDao.class);
+        superDao = ctx.getBean("superDao", SuperDao.class);
+        superPowerDao = ctx.getBean("superPowerDao", SuperPowerDao.class);
+    }
+    
+    @BeforeClass
+    public static void setUpClass() {
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+    }
+    
+    @Before
+    public void setUp() {
+        superPowerDao.deleteAllPairs();
+        
+        for (Power currentPower : powerDao.getAllPowers()) {
+            powerDao.removePower(currentPower.getPowerId());
+        }
+        
+        for (Super currentSuper : superDao.getAllSupers()) {
+            superDao.removeSuper(currentSuper.getSuperId());
+        }
+    }
+    
+    @After
+    public void tearDown() {
+        superPowerDao.deleteAllPairs();
+        
+        for (Power currentPower : powerDao.getAllPowers()) {
+            powerDao.removePower(currentPower.getPowerId());
+        }
+        
+        for (Super currentSuper : superDao.getAllSupers()) {
+            superDao.removeSuper(currentSuper.getSuperId());
+        }
+    }
+
+    @Test
+    public void addGetPower() {
+        Power power = new Power();
+        power.setPowerName("Flight");
+        power.setDescription("They can fly.");
+        
+        power = powerDao.addPower(power);
+        assertEquals(power, powerDao.getPowerById(power.getPowerId()));
+    }
+    
+    @Test
+    public void deletePower() {
+        Power power = new Power();
+        power.setPowerName("Flight");
+        power.setDescription("They can fly.");
+        
+        power = powerDao.addPower(power);
+        assertEquals(power, powerDao.getPowerById(power.getPowerId()));
+        
+        powerDao.removePower(power.getPowerId());
+        assertNull(powerDao.getPowerById(power.getPowerId()));
+    }
+    
+    @Test
+    public void updatePower() {
+        Power power = new Power();
+        power.setPowerName("Flight");
+        power.setDescription("They can fly.");
+        
+        power = powerDao.addPower(power);
+        power.setPowerName("Invisibility");
+        powerDao.updatePower(power);
+        assertEquals(power, powerDao.getPowerById(power.getPowerId()));
+    }
+    
+    @Test
+    public void getAllPowers() {
+        Power power = new Power();
+        power.setPowerName("Flight");
+        power.setDescription("They can fly.");
+        powerDao.addPower(power);
+        
+        Power powerTwo = new Power();
+        powerTwo.setPowerName("Strength");
+        powerTwo.setDescription("They are strong.");
+        powerDao.addPower(powerTwo);
+        
+        assertEquals(2, powerDao.getAllPowers().size());
+    }
+    
+    @Test
+    public void testGetAllPowersForSuper() {
+        List<Power> powers = new ArrayList<>();
+        SuperPower superPower = new SuperPower();
+        
+        Super addSuper = new Super();
+        addSuper.setAlias("Bad Boy");
+        addSuper.setSuperType("Villain");
+        addSuper.setDescription("One bad boy.");
+        addSuper = superDao.addSuper(addSuper);
+        superPower.setSuper(addSuper);
+        
+        Power power = new Power();
+        power.setPowerName("Flight");
+        power.setDescription("They can fly.");
+        power = powerDao.addPower(power);
+        powers.add(power);
+        superPower.setPower(power);
+        superPowerDao.addSuperPowerPair(superPower);
+        
+        Power powerTwo = new Power();
+        powerTwo.setPowerName("Strength");
+        powerTwo.setDescription("They are strong.");
+        powerTwo = powerDao.addPower(powerTwo);
+        powers.add(powerTwo);
+        superPower.setPower(powerTwo);
+        superPowerDao.addSuperPowerPair(superPower);
+        
+        assertEquals(powers, powerDao.getAllPowersForSuper(addSuper.getSuperId()));
+    }
+    
+}

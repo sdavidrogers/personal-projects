@@ -1,0 +1,142 @@
+package com.sg.superherosightings.dao;
+
+import com.sg.superherosightings.dto.User;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+
+
+public class UserDaoJdbcImpl implements UserDao {
+    
+    
+    
+    private static final String SQL_INSERT_USER
+        = "insert into Users (Username, Password, UserType, enabled) values (?, ?, ?, 1)";
+    
+    private static final String SQL_INSERT_AUTHORITY
+        = "insert into Authorities (Username, Authority) values (?, ?)";
+    
+    private static final String SQL_UPDATE_USER
+            = "update Users set "
+            + "Username = ?, Password = ?, "
+            + "UserType = ? "
+            + "where UserID = ?";
+    
+    private static final String SQL_DELETE_USER
+        = "delete from Users where Username = ?";
+    
+    private static final String SQL_DELETE_AUTHORITIES
+        = "delete from Authorities where Username = ?";
+    
+    private static final String SQL_GET_ALL_USERS
+        = "select * from Users";
+    
+    private static final String SQL_SELECT_USER
+            = "select * from Users where Username = ?";
+
+    
+    
+    private JdbcTemplate jdbcTemplate;
+
+    
+    
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    
+    
+    @Override
+    public User addUser(User newUser) {
+        jdbcTemplate.update(SQL_INSERT_USER, 
+                            newUser.getUsername(), 
+                            newUser.getPassword(),
+                            newUser.getUserType());
+        newUser.setId(jdbcTemplate.queryForObject("select LAST_INSERT_ID()", 
+                                                   Integer.class));
+
+        // now insert user's roles
+        ArrayList<String> authorities = newUser.getAuthorities();
+        for (String authority : authorities) {
+            jdbcTemplate.update(SQL_INSERT_AUTHORITY, 
+                                newUser.getUsername(), 
+                                authority);
+        }
+
+        return newUser;
+    }
+
+    
+    
+    @Override
+    public void deleteUser(String username) {
+        // first delete all authorities for this user
+        jdbcTemplate.update(SQL_DELETE_AUTHORITIES, username);
+        // second delete the user
+        jdbcTemplate.update(SQL_DELETE_USER, username);
+    }
+
+    
+    
+    @Override
+    public void updateUser(User updatedUser) {
+        // Clear Authorities table of associated username
+        jdbcTemplate.update(SQL_DELETE_AUTHORITIES, updatedUser.getUsername());
+        
+        // Update Users table
+        jdbcTemplate.update(SQL_UPDATE_USER,
+                updatedUser.getUsername(),
+                updatedUser.getPassword(),
+                updatedUser.getUserType(),
+                updatedUser.getId());
+        
+        // Update Authorities table with new values
+        ArrayList<String> authorities = updatedUser.getAuthorities();
+        for (String authority : authorities) {
+            jdbcTemplate.update(SQL_INSERT_AUTHORITY, 
+                                updatedUser.getUsername(), 
+                                authority);
+        }
+    }
+
+    
+    
+    @Override
+    public List<User> getAllUsers() {
+        return jdbcTemplate.query(SQL_GET_ALL_USERS, new UserMapper());
+    }
+    
+    
+    
+    @Override
+    public User getUserByUsername(String username) {
+        try {
+            return jdbcTemplate.queryForObject(SQL_SELECT_USER,
+                    new UserDaoJdbcImpl.UserMapper(), username);
+        } catch (EmptyResultDataAccessException ex) {
+            return null;
+        }
+    }
+
+    
+    
+    private static final class UserMapper implements RowMapper<User> {
+
+        public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+            User user = new User();
+            user.setId(rs.getInt("UserID"));
+            user.setUsername(rs.getString("Username"));
+            user.setPassword(rs.getString("Password"));
+            user.setUserType(rs.getString("UserType"));
+            return user;
+        }
+        
+    }
+    
+    
+    
+}

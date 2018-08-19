@@ -1,0 +1,163 @@
+package com.sg.superherosightings.controller;
+
+import com.sg.superherosightings.dto.Organization;
+import com.sg.superherosightings.dto.Power;
+import com.sg.superherosightings.dto.Super;
+import com.sg.superherosightings.service.OrganizationService;
+import com.sg.superherosightings.service.PowerService;
+import com.sg.superherosightings.service.SightingService;
+import com.sg.superherosightings.service.SuperService;
+import java.util.ArrayList;
+import java.util.List;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+
+@Controller
+public class SuperController {
+    
+    
+    
+    SuperService superService;
+    PowerService powerService;
+    OrganizationService organizationService;
+    SightingService sightingService;
+    
+    
+    
+    @Inject
+    public SuperController(SuperService superService, PowerService powerService,
+            OrganizationService organizationService, SightingService sightingService) {
+        this.superService = superService;
+        this.powerService = powerService;
+        this.organizationService = organizationService;
+        this.sightingService = sightingService;
+    }
+    
+    
+    
+    @RequestMapping(value = "/displaySupersPage", method = RequestMethod.GET)
+    public String displaySupersPage(Model model) {
+        model.addAttribute("superList", superService.getAllSupers());
+        return "Supers";
+    }
+    
+    
+    
+    @RequestMapping(value = "/displaySuper", method = RequestMethod.GET)
+    public String displaySuper(HttpServletRequest request, Model model) {
+        long superId = Long.parseLong(request.getParameter("superId"));
+        model.addAttribute("currentSuper", superService.getSuperById(superId));
+        model.addAttribute("sightings", sightingService.getAllSightingsWithSuper(superId));
+        return "SuperDisplay";
+    }
+    
+    
+    
+    @RequestMapping(value = "/deleteSuper", method = RequestMethod.GET)
+    public String deleteSuper(HttpServletRequest request) {
+        long superId = Long.parseLong(request.getParameter("superId"));
+        superService.removeSuper(superId);
+        return "redirect:/displaySupersPage";
+    }
+    
+    
+    
+    @RequestMapping(value = "/displayAddSuper", method = RequestMethod.GET)
+    public String displayAddSuper(Model model) {
+        model.addAttribute("powerList", powerService.getAllPowers());
+        model.addAttribute("organizationList", organizationService.getAllOrganizations());
+        return "SuperAdd";
+    }
+    
+    
+    
+    @RequestMapping(value = "addSuper", method = RequestMethod.POST)
+    public String addSuper(HttpServletRequest request) {
+        Super newSuper = new Super();
+        newSuper.setAlias(request.getParameter("alias"));
+        newSuper.setSuperType(request.getParameter("typeSelect"));
+        newSuper.setDescription(request.getParameter("description"));
+        
+        // Add selected powers
+        if (request.getParameterValues("powerSelect") != null) {
+            String pIdsString[] = request.getParameterValues("powerSelect");
+            List<Power> powers = new ArrayList<>();
+            for (String currentId : pIdsString) {
+                powers.add(powerService.getPowerById(Long.parseLong(currentId)));
+            }
+            newSuper.setPowers(powers);
+        }
+        
+        // Add selected organizations
+        if (request.getParameterValues("organizationSelect") != null) {
+            String oIdsString[] = request.getParameterValues("organizationSelect");
+            List<Organization> organizations = new ArrayList<>();
+            for (String currentId : oIdsString) {
+                organizations.add(organizationService.getOrganizationById(Long.parseLong(currentId)));
+            }
+            newSuper.setOrganizations(organizations);
+        }
+        
+        superService.addSuper(newSuper);
+        
+        return "redirect:/displaySupersPage";
+    }
+    
+    
+    
+    @RequestMapping(value = "/displayEditSuper", method = RequestMethod.GET)
+    public String displayEditSuper(HttpServletRequest request, Model model) {
+        long superId = Long.parseLong(request.getParameter("superId"));
+        Super editedSuper = superService.getSuperById(superId);
+        model.addAttribute("super", editedSuper);
+        model.addAttribute("organizations", editedSuper.getOrganizations());
+        model.addAttribute("powers", editedSuper.getPowers());
+        model.addAttribute("powerList", powerService.getAllPowers());
+        model.addAttribute("organizationList", organizationService.getAllOrganizations());
+        return "SuperEdit";
+    }
+    
+    
+    
+    @RequestMapping(value = "/editSuper", method = RequestMethod.POST)
+    public String editSuper(@Valid @ModelAttribute("super") Super updatedSuper, 
+            BindingResult result, HttpServletRequest request) {
+        if (result.hasErrors()) {
+            return "SuperEdit";
+        }
+        // Add selected powers
+        if (request.getParameterValues("powerSelect") != null) {
+            String pIdsString[] = request.getParameterValues("powerSelect");
+            List<Power> powers = new ArrayList<>();
+            for (String currentId : pIdsString) {
+                powers.add(powerService.getPowerById(Long.parseLong(currentId)));
+            }
+            updatedSuper.setPowers(powers);
+        }
+        
+        // Add selected organizations
+        if (request.getParameterValues("organizationSelect") != null) {
+            String oIdsString[] = request.getParameterValues("organizationSelect");
+            List<Organization> organizations = new ArrayList<>();
+            for (String currentId : oIdsString) {
+                organizations.add(organizationService.getOrganizationById(Long.parseLong(currentId)));
+            }
+            updatedSuper.setOrganizations(organizations);
+        }
+        
+        superService.updateSuper(updatedSuper);
+        
+        return "redirect:/displaySupersPage";
+    }
+    
+    
+    
+}

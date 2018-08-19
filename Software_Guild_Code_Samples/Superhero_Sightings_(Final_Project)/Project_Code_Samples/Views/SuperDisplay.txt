@@ -1,0 +1,111 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Superhero Sightings</title>
+        <!-- Bootstrap core CSS -->
+        <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet"> 
+    </head>
+    <body>
+        
+        <div class="container">
+        
+            <h1>Superhero Sightings</h1>
+            <br/>
+            
+            <div class="col-md-2 col-md-offset-10">
+                <sec:authorize access="isAnonymous()">
+                    <form class="form-inline" role="form" method="GET" action="loginButtonSupers">
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-default" value="Log In"/>
+                        </div>
+                    </form>
+                </sec:authorize>
+            </div>
+        
+            <div class="col-md-12">
+                <div class="col-md-10 ">
+                    <c:if test="${pageContext.request.userPrincipal.name != null}">
+                        <p>User : ${pageContext.request.userPrincipal.name}
+                            | <a href="<c:url value="/j_spring_security_logout" />" > Logout</a>
+                        </p>
+                    </c:if>
+                </div>
+                <div class="col-md-2">
+                    <sec:authorize access="hasRole('ROLE_ADMIN')">
+                        <form class="form-inline" role="form" method="GET" action="displayUsersPage">
+                            <div class="form-group">
+                                <input type="submit" class="btn btn-default" value="Manage Users"/>
+                            </div>
+                        </form>
+                    </sec:authorize>
+                </div>
+            </div>
+            
+            <br/>
+
+            <div class="navbar">
+                <ul class="nav nav-tabs">
+                    <li role="presentation"><a href="${pageContext.request.contextPath}/">Home</a></li>
+                    <li role="presentation"><a href="${pageContext.request.contextPath}/displayLocationsPage">Locations</a></li>
+                    <li role="presentation"><a href="${pageContext.request.contextPath}/displayOrganizationsPage">Organizations</a></li>
+                    <li role="presentation"><a href="${pageContext.request.contextPath}/displayPowersPage">Powers</a></li>
+                    <li role="presentation"><a href="${pageContext.request.contextPath}/displaySupersPage">Supers</a></li>
+                    <li role="presentation"><a href="${pageContext.request.contextPath}/displaySightingsPage">Sightings</a></li>
+                </ul>    
+            </div>
+
+            <h2>Super Information</h2>
+            
+            <p>
+                <b>Alias:</b>  <c:out value="${currentSuper.alias}"/>
+            </p>
+            
+            <p>
+                <b>Type:</b>  <c:out value="${currentSuper.superType}"/>
+            </p>
+            
+            <p>
+                <b>Description:</b>  <c:out value="${currentSuper.description}"/>
+            </p>
+            
+            <h3>Powers:</h3>
+            <c:forEach var="currentPower" items="${currentSuper.powers}">
+                <p>
+                    <a href="displayPower?powerId=${currentPower.powerId}">
+                        <c:out value="${currentPower.powerName}" />
+                    </a>
+                </p>
+            </c:forEach>
+                
+            <h3>Organizations:</h3>
+            <c:forEach var="currentOrganization" items="${currentSuper.organizations}">
+                <p>
+                    <a href="displayOrganization?organizationId=${currentOrganization.organizationId}">
+                        <c:out value="${currentOrganization.organizationName}" />
+                    </a>
+                </p>
+            </c:forEach>
+                
+            <h3>Sightings:</h3>
+            <c:forEach var="currentSighting" items="${sightings}">
+                <p>
+                    <a href="displaySighting?sightingId=${currentSighting.sightingId}">
+                        <c:out value="${currentSighting.location.locationName}, ${currentSighting.sightingDate}" />
+                    </a>
+                </p>
+            </c:forEach>
+            
+        </div>
+        
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="${pageContext.request.contextPath}/js/jquery-3.1.1.min.js"></script>
+        <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+        
+    </body>
+</html>

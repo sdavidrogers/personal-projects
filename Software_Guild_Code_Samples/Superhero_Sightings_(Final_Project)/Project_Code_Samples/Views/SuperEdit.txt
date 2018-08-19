@@ -1,0 +1,152 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Superhero Sightings</title>
+        <!-- Bootstrap core CSS -->
+        <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet"> 
+    </head>
+    <body>
+        
+        <div class="container">
+        
+            <h1>Superhero Sightings</h1>
+            <br/>
+        
+            <div class="col-md-12">
+                <div class="col-md-10 ">
+                    <c:if test="${pageContext.request.userPrincipal.name != null}">
+                        <p>User : ${pageContext.request.userPrincipal.name}
+                            | <a href="<c:url value="/j_spring_security_logout" />" > Logout</a>
+                        </p>
+                    </c:if>
+                </div>
+                <div class="col-md-2">
+                    <sec:authorize access="hasRole('ROLE_ADMIN')">
+                        <form class="form-inline" role="form" method="GET" action="displayUsersPage">
+                            <div class="form-group">
+                                <input type="submit" class="btn btn-default" value="Manage Users"/>
+                            </div>
+                        </form>
+                    </sec:authorize>
+                </div>
+            </div>
+            
+            <br/>
+
+            <div class="navbar">
+                <ul class="nav nav-tabs">
+                    <li role="presentation"><a href="${pageContext.request.contextPath}/">Home</a></li>
+                    <li role="presentation"><a href="${pageContext.request.contextPath}/displayLocationsPage">Locations</a></li>
+                    <li role="presentation"><a href="${pageContext.request.contextPath}/displayOrganizationsPage">Organizations</a></li>
+                    <li role="presentation"><a href="${pageContext.request.contextPath}/displayPowersPage">Powers</a></li>
+                    <li role="presentation"><a href="${pageContext.request.contextPath}/displaySupersPage">Supers</a></li>
+                    <li role="presentation"><a href="${pageContext.request.contextPath}/displaySightingsPage">Sightings</a></li>
+                </ul>    
+            </div>
+
+            <h2>Edit Super</h2>
+            
+            <div class="col-md-12">
+                <sf:form class="form-horizontal" role="form" modelAttribute="super"
+                         action="editSuper" method="POST">
+                    <div class="form-group">
+                        <label for="add-alias" class="col-md-2 control-label">Alias:</label>
+                        <div class="col-md-4">
+                            <sf:input type="text" class="form-control" id="add-alias"
+                                      path="alias" placeholder="Alias"/>
+                            <sf:errors path="alias" cssclass="error"></sf:errors>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-type" class="col-md-2 control-label">Type:</label>
+                        <div class="col-md-4">
+                            <sf:select class="form-control" id="add-type"
+                                      path="superType" placeholder="Type">
+                                <sf:option value="Hero">Hero</sf:option>
+                                <sf:option value="Villain">Villain</sf:option>
+                                <sf:option value="Neutral">Neutral</sf:option>
+                            </sf:select>
+                            <sf:errors path="superType" cssclass="error"></sf:errors>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-description" class="col-md-2 control-label">Description:</label>
+                        <div class="col-md-4">
+                            <sf:textarea class="form-control" id="add-description"
+                                          path="description" placeholder="Description"/>
+                            <sf:errors path="description" cssclass="error"></sf:errors>
+                            <sf:hidden path="superId"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="old-powers" class="col-md-2 control-label">
+                            Old Powers:
+                        </label>
+                        <label id="old-powers"> -- 
+                            <c:forEach var="currentPower" items="${powers}">
+                                <c:out value="${currentPower.powerName}"/> -- 
+                            </c:forEach>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-powers" class="col-md-2 control-label">New Powers:<br/>(Ctrl + click)</label>
+                        <div class="col-md-4">
+                            <select multiple="multiple" class="form-control" name="powerSelect" 
+                                    required="required" id="add-powers">
+                                <c:forEach var="currentPower" items="${powerList}">
+                                    <option value="${currentPower.powerId}">${currentPower.powerName}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="old-organizations" class="col-md-2 control-label">
+                            Old Organizations:
+                        </label>
+                        <label id="old-organizations"> -- 
+                            <c:forEach var="currentOrganization" items="${organizations}">
+                                <c:out value="${currentOrganization.organizationName}"/> -- 
+                            </c:forEach>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-organizations" class="col-md-2 control-label">New Organizations:<br/>(Ctrl + click)</label>
+                        <div class="col-md-4">
+                            <select multiple="multiple" class="form-control" name="organizationSelect" 
+                                    id="add-organizations">
+                                <c:forEach var="currentOrganization" items="${organizationList}">
+                                    <option value="${currentOrganization.organizationId}">${currentOrganization.organizationName}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-1">
+                            <input type="submit" class="btn btn-default" value="Update Super"/>
+                        </div>
+                    </div>
+                </sf:form>
+                <form class="form-horizontal" role="form" method="GET" action="displaySupersPage">
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-1">
+                            <input type="submit" class="btn btn-default" value="Cancel"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+        
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="${pageContext.request.contextPath}/js/jquery-3.1.1.min.js"></script>
+        <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+        
+    </body>
+</html>

@@ -1,0 +1,166 @@
+package com.sg.superherosightings.dao;
+
+import com.sg.superherosightings.dto.Location;
+import com.sg.superherosightings.dto.Sighting;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.List;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+
+public class SightingDaoJdbcImpl implements SightingDao {
+    
+    
+    
+    private static final String SQL_INSERT_SIGHTING
+            = "insert into Sightings "
+            + "(LocationID, SightingDate) "
+            + "values (?, ?)";
+    
+    private static final String SQL_DELETE_SIGHTING
+            = "delete from Sightings where SightingID = ?";
+    
+    private static final String SQL_SELECT_SIGHTING
+            = "select * from Sightings where SightingID = ?";
+    
+    private static final String SQL_UPDATE_SIGHTING
+            = "update Sightings set "
+            + "LocationID = ?, SightingDate = ? "
+            + "where SightingID = ?";
+    
+    private static final String SQL_SELECT_ALL_SIGHTINGS
+            = "select * from Sightings";
+    
+    private static final String SQL_SELECT_RECENT_SIGHTINGS
+            = "select * from Sightings "
+            + "order by SightingDate desc "
+            + "limit 10";
+    
+    private static final String SQL_SELECT_SIGHTINGS_BY_SUPER
+            = "select ss.SightingID, s.LocationID, s.SightingDate " 
+            + "from SupersAndSightings ss "
+            + "inner join Sightings s "
+            + "on ss.SightingID = s.SightingID "
+            + "where SuperID = ?";
+    
+    private static final String SQL_SELECT_SIGHTINGS_BY_DATE
+            = "select SightingID, LocationID, SightingDate "
+            + "from Sightings "
+            + "where SightingDate = ?";
+    
+    private static final String SQL_SELECT_SIGHTINGS_BY_LOCATION
+            = "select SightingID, LocationID, SightingDate "
+            + "from Sightings "
+            + "where LocationID = ?";
+    
+    
+    
+    private JdbcTemplate jdbcTemplate;
+
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    
+    
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    public Sighting addSighting(Sighting sighting) {
+        jdbcTemplate.update(SQL_INSERT_SIGHTING,
+                sighting.getLocation().getLocationId(),
+                java.sql.Date.valueOf(sighting.getSightingDate()));
+        int newId = jdbcTemplate.queryForObject("select LAST_INSERT_ID()", Integer.class);
+        sighting.setSightingId(newId);
+        return sighting;
+    }
+
+    
+    
+    @Override
+    public void removeSighting(long sightingId) {
+        jdbcTemplate.update(SQL_DELETE_SIGHTING, sightingId);
+    }
+
+    
+    
+    @Override
+    public void updateSighting(Sighting sighting) {
+        jdbcTemplate.update(SQL_UPDATE_SIGHTING,
+                sighting.getLocation().getLocationId(),
+                java.sql.Date.valueOf(sighting.getSightingDate()),
+                sighting.getSightingId());
+    }
+
+    
+    
+    @Override
+    public List<Sighting> getAllSightings() {
+        return jdbcTemplate.query(SQL_SELECT_ALL_SIGHTINGS, 
+                new SightingMapper());
+    }
+    
+    
+    
+    @Override
+    public List<Sighting> getRecentSightings() {
+        return jdbcTemplate.query(SQL_SELECT_RECENT_SIGHTINGS, 
+                new SightingMapper());
+    }
+
+    
+    
+    @Override
+    public Sighting getSightingById(long sightingId) {
+        try {
+            return jdbcTemplate.queryForObject(SQL_SELECT_SIGHTING,
+                    new SightingMapper(), sightingId);
+        } catch (EmptyResultDataAccessException ex) {
+            return null;
+        }
+    }
+
+    
+    
+    @Override
+    public List<Sighting> getAllSightingsFromDate(LocalDate date) {
+        return jdbcTemplate.query(SQL_SELECT_SIGHTINGS_BY_DATE, 
+                new SightingMapper(), java.sql.Date.valueOf(date));
+    }
+
+    
+    
+    @Override
+    public List<Sighting> getAllSightingsWithSuper(long superId) {
+        return jdbcTemplate.query(SQL_SELECT_SIGHTINGS_BY_SUPER, 
+                new SightingMapper(), superId);
+    }
+
+    
+    
+    @Override
+    public List<Sighting> getAllSightingsFromLocation(long locationId) {
+        return jdbcTemplate.query(SQL_SELECT_SIGHTINGS_BY_LOCATION, 
+                new SightingMapper(), locationId);
+    }
+    
+    
+    
+    private static final class SightingMapper implements RowMapper<Sighting> {
+        @Override
+        public Sighting mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Sighting sighting = new Sighting();
+            Location location = new Location();
+            sighting.setSightingId(rs.getLong("SightingID"));
+            location.setLocationId(rs.getLong("LocationID"));
+            sighting.setLocation(location);
+            sighting.setSightingDate(rs.getTimestamp("SightingDate").toLocalDateTime().toLocalDate());
+            return sighting;
+        }
+    }
+    
+}

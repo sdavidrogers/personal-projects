@@ -1,0 +1,79 @@
+package com.sg.superherosightings.service;
+
+import com.sg.superherosightings.dao.LocationDao;
+import com.sg.superherosightings.dao.SightingDao;
+import com.sg.superherosightings.dao.SuperSightingDao;
+import com.sg.superherosightings.dto.Location;
+import com.sg.superherosightings.dto.Sighting;
+import java.util.List;
+import javax.inject.Inject;
+
+
+public class LocationServiceJdbcImpl implements LocationService {
+    
+    
+    
+    private final LocationDao locationDao;
+    private final SightingDao sightingDao;
+    private final SuperSightingDao superSightingDao;
+    
+    
+    
+    @Inject
+    public LocationServiceJdbcImpl(LocationDao locationDao, 
+            SightingDao sightingDao, SuperSightingDao superSightingDao) {
+        this.locationDao = locationDao;
+        this.sightingDao = sightingDao;
+        this.superSightingDao = superSightingDao;
+    }
+
+    
+    
+    @Override
+    public Location addLocation(Location location) {
+        location.setLocationId(locationDao.addLocation(location).getLocationId());
+        return location;
+    }
+
+    
+    
+    @Override
+    public void removeLocation(long locationId) {
+        for (Sighting currentSighting : sightingDao.getAllSightingsFromLocation(locationId)) {
+            superSightingDao.deletePairsBySighting(currentSighting.getSightingId());
+            sightingDao.removeSighting(currentSighting.getSightingId());
+        }
+        locationDao.removeLocation(locationId);
+    }
+
+    
+    
+    @Override
+    public void updateLocation(Location location) {
+        locationDao.updateLocation(location);
+    }
+
+    
+    
+    @Override
+    public List<Location> getAllLocations() {
+        return locationDao.getAllLocations();
+    }
+
+    
+    
+    @Override
+    public Location getLocationById(long locationId) {
+        return locationDao.getLocationById(locationId);
+    }
+
+    
+    
+    @Override
+    public List<Location> getAllLocationsFromSuper(long superId) {
+        return locationDao.getAllLocationsFromSuper(superId);
+    }
+    
+    
+    
+}

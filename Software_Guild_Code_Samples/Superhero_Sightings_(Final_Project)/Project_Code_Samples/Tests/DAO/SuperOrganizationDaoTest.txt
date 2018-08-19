@@ -1,0 +1,162 @@
+package com.sg.superherosightings.dao;
+
+import com.sg.superherosightings.dto.Organization;
+import com.sg.superherosightings.dto.Super;
+import com.sg.superherosightings.dto.SuperOrganization;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import static org.junit.Assert.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+
+public class SuperOrganizationDaoJdbcImplTest {
+    
+    OrganizationDao organizationDao;
+    SuperDao superDao;
+    SuperOrganizationDao superOrganizationDao;
+    
+    public SuperOrganizationDaoJdbcImplTest() {
+        ApplicationContext ctx 
+                = new ClassPathXmlApplicationContext("test-applicationContext.xml");
+        organizationDao = ctx.getBean("organizationDao", OrganizationDao.class);
+        superDao = ctx.getBean("superDao", SuperDao.class);
+        superOrganizationDao = ctx.getBean("superOrganizationDao", SuperOrganizationDao.class);
+    }
+    
+    @BeforeClass
+    public static void setUpClass() {
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+    }
+    
+    @Before
+    public void setUp() {
+        superOrganizationDao.deleteAllPairs();
+        
+        for (Organization currentOrganization : organizationDao.getAllOrganizations()) {
+            organizationDao.removeOrganization(currentOrganization.getOrganizationId());
+        }
+        
+        for (Super currentSuper : superDao.getAllSupers()) {
+            superDao.removeSuper(currentSuper.getSuperId());
+        }
+    }
+    
+    @After
+    public void tearDown() {
+        superOrganizationDao.deleteAllPairs();
+        
+        for (Organization currentOrganization : organizationDao.getAllOrganizations()) {
+            organizationDao.removeOrganization(currentOrganization.getOrganizationId());
+        }
+        
+        for (Super currentSuper : superDao.getAllSupers()) {
+            superDao.removeSuper(currentSuper.getSuperId());
+        }
+    }
+
+    @Test
+    public void testAddSuperOrganizationPair() {
+        Super addSuper = new Super();
+        Organization organization = new Organization();
+        SuperOrganization superOrganization = new SuperOrganization();
+        List<Organization> organizations = new ArrayList<>();
+        
+        addSuper.setAlias("Bad Boy");
+        addSuper.setSuperType("Villain");
+        addSuper.setDescription("One bad boy.");
+        addSuper = superDao.addSuper(addSuper);
+        superOrganization.setSuper(addSuper);
+        
+        organization.setOrganizationName("The Bad Guys");
+        organization.setAddress("Group for bad guys.");
+        organization.setAddress("666 Bad Boy Lane");
+        organization.setPhone("216-445-5532");
+        organization = organizationDao.addOrganization(organization);
+        superOrganization.setOrganization(organization);
+        organizations.add(organization);
+        
+        superOrganizationDao.addSuperOrganizationPair(superOrganization);
+        
+        assertEquals(organizations, organizationDao.getAllOrganizationsForSuper(addSuper.getSuperId()));
+    }
+
+    @Test
+    public void testDeleteSuperOrganizationPair() {
+        Super addSuper = new Super();
+        Organization organization = new Organization();
+        SuperOrganization superOrganization = new SuperOrganization();
+        List<Organization> organizations = new ArrayList<>();
+        
+        addSuper.setAlias("Bad Boy");
+        addSuper.setSuperType("Villain");
+        addSuper.setDescription("One bad boy.");
+        addSuper = superDao.addSuper(addSuper);
+        superOrganization.setSuper(addSuper);
+        
+        organization.setOrganizationName("The Bad Guys");
+        organization.setAddress("Group for bad guys.");
+        organization.setAddress("666 Bad Boy Lane");
+        organization.setPhone("216-445-5532");
+        organization = organizationDao.addOrganization(organization);
+        superOrganization.setOrganization(organization);
+        organizations.add(organization);
+        
+        superOrganizationDao.addSuperOrganizationPair(superOrganization);
+        
+        assertEquals(organizations, organizationDao.getAllOrganizationsForSuper(addSuper.getSuperId()));
+        
+        superOrganizationDao.deleteSuperOrganizationPair(superOrganization);
+        
+        assertEquals(0, organizationDao.getAllOrganizationsForSuper(addSuper.getSuperId()).size());
+    }
+
+    @Test
+    public void testDeleteAllPairs() {
+        Super addSuper = new Super();
+        Super secondSuper = new Super();
+        Organization organization = new Organization();
+        SuperOrganization superOrganization = new SuperOrganization();
+        List<Organization> organizations = new ArrayList<>();
+        
+        addSuper.setAlias("Bad Boy");
+        addSuper.setSuperType("Villain");
+        addSuper.setDescription("One bad boy.");
+        addSuper = superDao.addSuper(addSuper);
+        superOrganization.setSuper(addSuper);
+        
+        organization.setOrganizationName("The Bad Guys");
+        organization.setAddress("Group for bad guys.");
+        organization.setAddress("666 Bad Boy Lane");
+        organization.setPhone("216-445-5532");
+        organization = organizationDao.addOrganization(organization);
+        superOrganization.setOrganization(organization);
+        organizations.add(organization);
+        
+        superOrganizationDao.addSuperOrganizationPair(superOrganization);
+        
+        assertEquals(organizations, organizationDao.getAllOrganizationsForSuper(addSuper.getSuperId()));
+        
+        secondSuper.setAlias("Good Boy");
+        secondSuper.setSuperType("Hero");
+        secondSuper.setDescription("One good boy.");
+        secondSuper = superDao.addSuper(secondSuper);
+        superOrganization.setSuper(secondSuper);
+        superOrganizationDao.addSuperOrganizationPair(superOrganization);
+        
+        assertEquals(organizations, organizationDao.getAllOrganizationsForSuper(secondSuper.getSuperId()));
+        
+        superOrganizationDao.deleteAllPairs();
+        
+        assertEquals(0, superDao.getAllSupersFromOrganization(organization.getOrganizationId()).size());
+    }
+    
+}

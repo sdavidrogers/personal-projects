@@ -1,0 +1,94 @@
+package com.sg.superherosightings.dto;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+
+public class Sighting {
+    
+    private long sightingId;
+    private Location location;
+    private LocalDate sightingDate;
+    private List<Super> supers;
+    
+    public Sighting() {
+        supers = new ArrayList<>();
+    }
+
+    public long getSightingId() {
+        return sightingId;
+    }
+
+    public void setSightingId(long sightingId) {
+        this.sightingId = sightingId;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public LocalDate getSightingDate() {
+        return sightingDate;
+    }
+
+    public void setSightingDate(LocalDate sightingDate) {
+        this.sightingDate = sightingDate;
+    }
+
+    public List<Super> getSupers() {
+        return supers;
+    }
+
+    public void setSupers(List<Super> supers) {
+        this.supers = supers;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 97 * hash + (int) (this.sightingId ^ (this.sightingId >>> 32));
+        hash = 97 * hash + Objects.hashCode(this.location);
+        hash = 97 * hash + Objects.hashCode(this.sightingDate);
+        hash = 97 * hash + Objects.hashCode(this.supers);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Sighting other = (Sighting) obj;
+        if (this.sightingId != other.sightingId) {
+            return false;
+        }
+        if (!Objects.equals(this.location, other.location)) {
+            return false;
+        }
+        if (!Objects.equals(this.sightingDate, other.sightingDate)) {
+            return false;
+        }
+        if (!Objects.equals(this.supers, other.supers)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "Sighting{" + "sightingId=" + sightingId + ", location=" + location + ", sightingDate=" + sightingDate + ", supers=" + supers + '}';
+    }
+    
+}

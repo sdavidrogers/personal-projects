@@ -1,0 +1,57 @@
+package com.sg.superherosightings.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+@Controller
+public class LoginController {
+
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String showLoginForm() {
+        return "Login";
+    }
+    
+    
+    
+    @RequestMapping(value = "/loginButtonHome", method = RequestMethod.GET)
+    public String loginButtonHome() {
+        return "redirect:/";
+    }
+    
+    
+    
+    @RequestMapping(value = "/loginButtonLocations", method = RequestMethod.GET)
+    public String loginButtonLocations() {
+        return "redirect:/displayLocationsPage";
+    }
+    
+    
+    
+    @RequestMapping(value = "/loginButtonOrganizations", method = RequestMethod.GET)
+    public String loginButtonOrganizations() {
+        return "redirect:/displayOrganizationsPage";
+    }
+    
+    
+    
+    @RequestMapping(value = "/loginButtonPowers", method = RequestMethod.GET)
+    public String loginButtonPowers() {
+        return "redirect:/displayPowersPage";
+    }
+    
+    
+    
+    @RequestMapping(value = "/loginButtonSupers", method = RequestMethod.GET)
+    public String loginButtonSupers() {
+        return "redirect:/displaySupersPage";
+    }
+    
+    
+    
+    @RequestMapping(value = "/loginButtonSightings", method = RequestMethod.GET)
+    public String loginButtonSightings() {
+        return "redirect:/displaySightingsPage";
+    }
+    
+}

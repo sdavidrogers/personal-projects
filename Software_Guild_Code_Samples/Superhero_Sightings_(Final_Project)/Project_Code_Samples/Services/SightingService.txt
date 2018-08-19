@@ -1,0 +1,162 @@
+package com.sg.superherosightings.service;
+
+import com.sg.superherosightings.dao.LocationDao;
+import com.sg.superherosightings.dao.SightingDao;
+import com.sg.superherosightings.dao.SuperDao;
+import com.sg.superherosightings.dao.SuperSightingDao;
+import com.sg.superherosightings.dto.Sighting;
+import com.sg.superherosightings.dto.Super;
+import com.sg.superherosightings.dto.SuperSighting;
+import java.time.LocalDate;
+import java.util.List;
+import javax.inject.Inject;
+
+
+public class SightingServiceJdbcImpl implements SightingService {
+    
+    
+    
+    private final SightingDao sightingDao;
+    private final SuperDao superDao;
+    private final LocationDao locationDao;
+    private final SuperSightingDao superSightingDao;
+
+    
+    
+    @Inject
+    public SightingServiceJdbcImpl(SightingDao sightingDao, SuperDao superDao,
+            LocationDao locationDao, SuperSightingDao superSightingDao) {
+        this.sightingDao = sightingDao;
+        this.superDao = superDao;
+        this.locationDao = locationDao;
+        this.superSightingDao = superSightingDao;
+    }
+    
+    
+    
+    @Override
+    public Sighting addSighting(Sighting sighting) {
+        sighting.setSightingId(sightingDao.addSighting(sighting).getSightingId());
+        List<Super> supers = sighting.getSupers();
+        if (supers != null & supers.size() > 0) {
+            SuperSighting superSighting = new SuperSighting();
+            superSighting.setSighting(sighting);
+            for (Super currentSuper : supers) {
+                superSighting.setSuper(currentSuper);
+                superSightingDao.addSuperSightingPair(superSighting);
+            }
+        }
+        return sighting;
+    }
+
+    
+    
+    @Override
+    public void removeSighting(long sightingId) {
+        superSightingDao.deletePairsBySighting(sightingId);
+        sightingDao.removeSighting(sightingId);
+    }
+
+    
+    
+    @Override
+    public void updateSighting(Sighting sighting) {
+        superSightingDao.deletePairsBySighting(sighting.getSightingId());
+        List<Super> supers = sighting.getSupers();
+        if (supers != null & supers.size() > 0) {
+            SuperSighting superSighting = new SuperSighting();
+            superSighting.setSighting(sighting);
+            for (Super currentSuper : supers) {
+                superSighting.setSuper(currentSuper);
+                superSightingDao.addSuperSightingPair(superSighting);
+            }
+        }
+        sightingDao.updateSighting(sighting);
+    }
+
+    
+    
+    @Override
+    public List<Sighting> getAllSightings() {
+        List<Sighting> sightings = sightingDao.getAllSightings();
+        for (Sighting currentSighting : sightings) {
+            currentSighting.setSupers(superDao
+                    .getAllSupersFromSighting(currentSighting.getSightingId()));
+            currentSighting.setLocation(locationDao
+                    .getLocationById(currentSighting.getLocation().getLocationId()));
+        }
+        return sightings;
+    }
+    
+    
+    
+    @Override
+    public List<Sighting> getRecentSightings() {
+        List<Sighting> sightings = sightingDao.getRecentSightings();
+        for (Sighting currentSighting : sightings) {
+            currentSighting.setSupers(superDao
+                    .getAllSupersFromSighting(currentSighting.getSightingId()));
+            currentSighting.setLocation(locationDao
+                    .getLocationById(currentSighting.getLocation().getLocationId()));
+        }
+        return sightings;
+    }
+
+    
+    
+    @Override
+    public Sighting getSightingById(long sightingId) {
+        Sighting sighting = sightingDao.getSightingById(sightingId);
+        if (sighting != null) {
+            sighting.setSupers(superDao.getAllSupersFromSighting(sightingId));
+            sighting.setLocation(locationDao
+                    .getLocationById(sighting.getLocation().getLocationId()));
+        }
+        return sighting;
+    }
+
+    
+    
+    @Override
+    public List<Sighting> getAllSightingsFromDate(LocalDate date) {
+        List<Sighting> sightings = sightingDao.getAllSightingsFromDate(date);
+        for (Sighting currentSighting : sightings) {
+            currentSighting.setSupers(superDao
+                    .getAllSupersFromSighting(currentSighting.getSightingId()));
+            currentSighting.setLocation(locationDao
+                    .getLocationById(currentSighting.getLocation().getLocationId()));
+        }
+        return sightings;
+    }
+
+    
+    
+    @Override
+    public List<Sighting> getAllSightingsWithSuper(long superId) {
+        List<Sighting> sightings = sightingDao.getAllSightingsWithSuper(superId);
+        for (Sighting currentSighting : sightings) {
+            currentSighting.setSupers(superDao
+                    .getAllSupersFromSighting(currentSighting.getSightingId()));
+            currentSighting.setLocation(locationDao
+                    .getLocationById(currentSighting.getLocation().getLocationId()));
+        }
+        return sightings;
+    }
+
+    
+    
+    @Override
+    public List<Sighting> getAllSightingsFromLocation(long locationId) {
+        List<Sighting> sightings = sightingDao.getAllSightingsFromLocation(locationId);
+        for (Sighting currentSighting : sightings) {
+            currentSighting.setSupers(superDao
+                    .getAllSupersFromSighting(currentSighting.getSightingId()));
+            currentSighting.setLocation(locationDao
+                    .getLocationById(currentSighting.getLocation().getLocationId()));
+        }
+        return sightings;
+    }
+    
+    
+    
+}

@@ -1,0 +1,173 @@
+package com.sg.superherosightings.dao;
+
+import com.sg.superherosightings.dto.Super;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+
+public class SuperDaoJdbcImpl implements SuperDao {
+    
+    
+    
+    private static final String SQL_INSERT_SUPER
+            = "insert into Supers "
+            + "(Alias, SuperType, Description) "
+            + "values (?, ?, ?)";
+    
+    private static final String SQL_DELETE_SUPER
+            = "delete from Supers where SuperID = ?";
+    
+    private static final String SQL_SELECT_SUPER
+            = "select * from Supers where SuperID = ?";
+    
+    private static final String SQL_UPDATE_SUPER
+            = "update Supers set "
+            + "Alias = ?, SuperType = ?, Description = ? "
+            + "where SuperID = ?";
+    
+    private static final String SQL_SELECT_ALL_SUPERS
+            = "select * from Supers";
+    
+    private static final String SQL_SELECT_SUPERS_BY_LOCATION
+            = "select distinct ss.SuperID, su.Alias, su.SuperType, su.Description "
+            + "from Sightings s "
+            + "inner join SupersAndSightings ss "
+            + "on s.SightingID = ss.SightingID "
+            + "inner join Supers su "
+            + "on ss.SuperID = su.SuperID "
+            + "where LocationID = ?";
+    
+    private static final String SQL_SELECT_SUPERS_BY_ORGANIZATION
+            = "select so.SuperID, s.Alias, s.SuperType, s.Description " 
+            + "from SupersAndOrganizations so "
+            + "inner join Supers s "
+            + "on so.SuperID = s.SuperID "
+            + "where OrganizationID = ?";
+    
+    private static final String SQL_SELECT_SUPERS_BY_SIGHTING
+            = "select ss.SuperID, s.Alias, s.SuperType, s.Description " 
+            + "from SupersAndSightings ss "
+            + "inner join Supers s "
+            + "on ss.SuperID = s.SuperID "
+            + "where SightingID = ?";
+    
+    private static final String SQL_SELECT_SUPERS_BY_POWER
+            = "select sp.SuperID, s.Alias, s.SuperType, s.Description " 
+            + "from SupersAndPowers sp "
+            + "inner join Supers s "
+            + "on sp.SuperID = s.SuperID "
+            + "where PowerID = ?";
+
+    
+    
+    private JdbcTemplate jdbcTemplate;
+
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+    
+    
+    
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    public Super addSuper(Super addSuper) {
+        jdbcTemplate.update(SQL_INSERT_SUPER,
+                addSuper.getAlias(),
+                addSuper.getSuperType(),
+                addSuper.getDescription());
+        int newId = jdbcTemplate.queryForObject("select LAST_INSERT_ID()", Integer.class);
+        addSuper.setSuperId(newId);
+        return addSuper;
+    }
+
+    
+    
+    @Override
+    public void removeSuper(long superId) {
+        jdbcTemplate.update(SQL_DELETE_SUPER, superId);
+    }
+
+    
+    
+    @Override
+    public void updateSuper(Super updateSuper) {
+        jdbcTemplate.update(SQL_UPDATE_SUPER,
+                updateSuper.getAlias(),
+                updateSuper.getSuperType(),
+                updateSuper.getDescription(),
+                updateSuper.getSuperId());
+    }
+
+    
+    
+    @Override
+    public List<Super> getAllSupers() {
+        return jdbcTemplate.query(SQL_SELECT_ALL_SUPERS, 
+                new SuperMapper());
+    }
+
+    
+    
+    @Override
+    public Super getSuperById(long superId) {
+        try {
+            return jdbcTemplate.queryForObject(SQL_SELECT_SUPER,
+                    new SuperMapper(), superId);
+        } catch (EmptyResultDataAccessException ex) {
+            return null;
+        }
+    }
+
+    
+    
+    @Override
+    public List<Super> getAllSupersFromLocation(long locationId) {
+        return jdbcTemplate.query(SQL_SELECT_SUPERS_BY_LOCATION, 
+                new SuperMapper(), locationId);
+    }
+
+    
+    
+    @Override
+    public List<Super> getAllSupersFromOrganization(long organizationId) {
+        return jdbcTemplate.query(SQL_SELECT_SUPERS_BY_ORGANIZATION, 
+                new SuperMapper(), organizationId);
+    }
+
+    
+    
+    @Override
+    public List<Super> getAllSupersWithPower(long powerId) {
+        return jdbcTemplate.query(SQL_SELECT_SUPERS_BY_POWER, 
+                new SuperMapper(), powerId);
+    }
+
+    
+    
+    @Override
+    public List<Super> getAllSupersFromSighting(long sightingId) {
+        return jdbcTemplate.query(SQL_SELECT_SUPERS_BY_SIGHTING, 
+                new SuperMapper(), sightingId);
+    }
+    
+    
+    
+    private static final class SuperMapper implements RowMapper<Super> {
+        @Override
+        public Super mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Super mappedSuper = new Super();
+            mappedSuper.setSuperId(rs.getLong("SuperID"));
+            mappedSuper.setAlias(rs.getString("Alias"));
+            mappedSuper.setSuperType(rs.getString("SuperType"));
+            mappedSuper.setDescription(rs.getString("Description"));
+            return mappedSuper;
+        }
+    }
+    
+}

@@ -1,0 +1,251 @@
+2017-04-25T13:25:42.190 :: getAllProductInfo :: Arguments 
+2017-04-25T13:25:42.258 :: getAllTaxInfo :: Arguments 
+2017-04-25T13:26:06.010 :: generateOrder :: Arguments  : Order{orderNumber=0, customerName=Sam, state=OH, productType=Wood, area=40.0, taxRate=6.25, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75, materialCost=206.000, laborCost=190.000, tax=63.360, total=459.360, entryDate=null}
+2017-04-25T13:26:36.999 :: addOrder :: Arguments  : Order{orderNumber=69, customerName=Sam, state=OH, productType=Wood, area=40.0, taxRate=6.25, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75, materialCost=206.000, laborCost=190.000, tax=63.360, total=459.360, entryDate=2017-04-25}
+2017-04-25T13:27:14.958 :: getOrderByNumber :: Arguments  : 2017-04-25 : 69
+2017-04-25T13:27:32.817 :: saveWork :: Arguments 
+2017-04-26T13:39:53.306 :: getAllProductInfo :: Arguments 
+2017-04-26T13:40:14.539 :: getAllTaxInfo :: Arguments 
+2017-04-26T13:42:03.909 :: OrderNotFoundException :: Arguments 2017-04-26
+2017-04-26T13:42:50.979 :: getAllProductInfo :: Arguments 
+2017-04-26T13:42:50.979 :: getAllTaxInfo :: Arguments 
+2017-04-26T13:43:18.321 :: generateOrder :: Arguments  : Order{orderNumber=0, customerName=Sam, state=OH, productType=Wood, area=40.0, taxRate=6.25, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75, materialCost=206.000, laborCost=190.000, tax=63.360, total=459.360, entryDate=null}
+2017-04-26T13:44:21.775 :: addOrder :: Arguments  : Order{orderNumber=91, customerName=Sam, state=OH, productType=Wood, area=40.0, taxRate=6.25, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75, materialCost=206.000, laborCost=190.000, tax=63.360, total=459.360, entryDate=2017-04-26}
+2017-04-26T13:44:24.918 :: getAllProductInfo :: Arguments 
+2017-04-26T13:44:24.918 :: getAllTaxInfo :: Arguments 
+2017-04-26T13:44:45.153 :: generateOrder :: Arguments  : Order{orderNumber=0, customerName=Sammy Davis, Jr., state=PA, productType=Carpet, area=60.0, taxRate=6.75, costPerSquareFoot=2.25, laborCostPerSquareFoot=2.10, materialCost=135.000, laborCost=126.000, tax=38.667, total=299.667, entryDate=null}
+2017-04-26T13:44:53.472 :: addOrder :: Arguments  : Order{orderNumber=92, customerName=Sammy Davis, Jr., state=PA, productType=Carpet, area=60.0, taxRate=6.75, costPerSquareFoot=2.25, laborCostPerSquareFoot=2.10, materialCost=135.000, laborCost=126.000, tax=38.667, total=299.667, entryDate=2017-04-26}
+2017-04-26T13:45:12.593 :: getOrdersByDate :: Arguments  : 2017-04-26
+2017-04-26T13:45:54.858 :: saveWork :: Arguments 
+2017-04-26T13:48:00.139 :: getAllProductInfo :: Arguments 
+2017-04-26T13:48:00.140 :: getAllTaxInfo :: Arguments 
+2017-04-26T13:48:17.563 :: generateOrder :: Arguments  : Order{orderNumber=0, customerName=Sam, state=OH, productType=Carpet, area=-200.0, taxRate=6.25, costPerSquareFoot=2.25, laborCostPerSquareFoot=2.10, materialCost=-450.000, laborCost=-420.000, tax=-139.200, total=-1009.200, entryDate=null}
+2017-04-26T13:50:25.045 :: getOrderByNumber :: Arguments  : 2017-04-26 : 92
+2017-04-26T13:50:35.060 :: getAllProductInfo :: Arguments 
+2017-04-26T13:50:35.060 :: getAllTaxInfo :: Arguments 
+2017-04-26T13:51:26.427 :: generateOrder :: Arguments  : Order{orderNumber=92, customerName=Sammy Davis, state=PA, productType=Wood, area=60.0, taxRate=6.75, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75, materialCost=309.000, laborCost=285.000, tax=88.001, total=682.001, entryDate=2017-04-26}
+2017-04-26T13:52:59.371 :: editOrder :: Arguments  : Order{orderNumber=92, customerName=Sammy Davis, state=PA, productType=Wood, area=60.0, taxRate=6.75, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75, materialCost=309.000, laborCost=285.000, tax=88.001, total=682.001, entryDate=2017-04-26}
+2017-04-26T13:53:28.615 :: getOrderByNumber :: Arguments  : 2017-04-26 : 92
+2017-04-27T15:58:25.978 :: getAllProductInfo :: Arguments 
+2017-04-27T15:58:26.037 :: getAllTaxInfo :: Arguments 
+2017-04-27T15:58:39.022 :: generateOrder :: Arguments  : Order{orderNumber=0, customerName=Sam, state=OH, productType=Wood, area=40.0, taxRate=6.25, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75, materialCost=206.000, laborCost=190.000, tax=63.360, total=459.360, entryDate=null}
+2017-04-27T15:58:41.651 :: addOrder :: Arguments  : Order{orderNumber=114, customerName=Sam, state=OH, productType=Wood, area=40.0, taxRate=6.25, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75, materialCost=206.000, laborCost=190.000, tax=63.360, total=459.360, entryDate=2017-04-27}
+2017-04-27T15:58:46.450 :: saveWork :: Arguments 
+2017-04-27T16:06:29.049 :: getAllProductInfo :: Arguments 
+2017-04-27T16:06:29.124 :: getAllTaxInfo :: Arguments 
+2017-04-27T16:06:37.358 :: generateOrder :: Arguments  : Order{orderNumber=0, customerName=Sam, state=OH, productType=Wood, area=40.0, taxRate=6.25, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75, materialCost=206.000, laborCost=190.000, tax=63.360, total=459.360, entryDate=null}
+2017-04-27T16:06:45.497 :: addOrder :: Arguments  : Order{orderNumber=143, customerName=Sam, state=OH, productType=Wood, area=40.0, taxRate=6.25, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75, materialCost=206.000, laborCost=190.000, tax=63.360, total=459.360, entryDate=2017-04-27}
+2017-04-27T16:06:49.100 :: saveWork :: Arguments 
+2017-04-27T16:07:22.672 :: getOrderByNumber :: Arguments  : 2017-04-27 : 143
+2017-04-27T16:07:55.347 :: getOrderByNumber :: Arguments  : 2017-04-27 : 143
+2017-04-27T16:07:58.656 :: removeOrder :: Arguments  : Order{orderNumber=143, customerName=Sam, state=OH, productType=Wood, area=40.0, taxRate=6.25, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75, materialCost=206.000, laborCost=190.000, tax=63.360, total=459.360, entryDate=2017-04-27}
+2017-04-27T16:08:09.486 :: saveWork :: Arguments 
+2017-04-27T16:09:19.893 :: getAllProductInfo :: Arguments 
+2017-04-27T16:09:19.958 :: getAllTaxInfo :: Arguments 
+2017-04-27T16:09:34.331 :: generateOrder :: Arguments  : Order{orderNumber=0, customerName=SAMMY, state=PA, productType=Wood, area=60.0, taxRate=6.75, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75, materialCost=309.000, laborCost=285.000, tax=88.001, total=682.001, entryDate=null}
+2017-04-27T16:09:38.385 :: addOrder :: Arguments  : Order{orderNumber=144, customerName=SAMMY, state=PA, productType=Wood, area=60.0, taxRate=6.75, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75, materialCost=309.000, laborCost=285.000, tax=88.001, total=682.001, entryDate=2017-04-27}
+2017-04-27T16:09:41.758 :: saveWork :: Arguments 
+2017-04-27T16:12:41.311 :: getAllProductInfo :: Arguments 
+2017-04-27T16:12:41.374 :: getAllTaxInfo :: Arguments 
+2017-04-27T16:12:52.281 :: generateOrder :: Arguments  : Order{orderNumber=0, customerName=Sammy Davis, Jr., state=OH, productType=Wood, area=40.0, taxRate=6.25, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75, materialCost=206.000, laborCost=190.000, tax=63.360, total=459.360, entryDate=null}
+2017-04-27T16:12:55.290 :: addOrder :: Arguments  : Order{orderNumber=145, customerName=Sammy Davis, Jr., state=OH, productType=Wood, area=40.0, taxRate=6.25, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75, materialCost=206.000, laborCost=190.000, tax=63.360, total=459.360, entryDate=2017-04-27}
+2017-04-27T16:13:01.821 :: saveWork :: Arguments 
+2017-04-27T16:13:20.051 :: getOrdersByDate :: Arguments  : 2017-04-27
+2017-04-27T16:50:49.496 :: getAllOrders :: Arguments 
+2017-04-27T16:51:07.787 :: saveWork :: Arguments 
+2017-04-29T01:05:58.734 :: getAllOrders :: Arguments 
+2017-04-29T01:06:29.966 :: getOrderByNumber :: Arguments  : 2017-04-27 : 145
+2017-04-29T01:06:34.077 :: getAllProductInfo :: Arguments 
+2017-04-29T01:06:34.078 :: getAllTaxInfo :: Arguments 
+2017-04-29T01:08:07.354 :: generateOrder :: Arguments  : Order{orderNumber=145, customerName=Sam,,,, state=OH, productType=Wood, area=20.0, taxRate=6.25, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75, materialCost=103.000, laborCost=95.000, tax=31.680, total=229.680, entryDate=2017-04-27}
+2017-04-29T01:08:13.470 :: editOrder :: Arguments  : Order{orderNumber=145, customerName=Sam,,,, state=OH, productType=Wood, area=20.0, taxRate=6.25, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75, materialCost=103.000, laborCost=95.000, tax=31.680, total=229.680, entryDate=2017-04-27}
+2017-04-29T01:08:33.026 :: getAllProductInfo :: Arguments 
+2017-04-29T01:09:11.945 :: saveWork :: Arguments 
+2017-04-29T01:09:24.273 :: getAllOrders :: Arguments 
+2017-04-29T11:59:42.948 :: getAllOrders :: Arguments 
+2017-04-29T12:01:49.011 :: getAllOrders :: Arguments 
+2017-04-29T12:51:04.089 :: getAllOrders :: Arguments 
+2017-04-29T12:51:34.806 :: getOrderByNumber :: Arguments  : 2017-04-27 : 145
+2017-04-29T12:51:40.320 :: getAllProductInfo :: Arguments 
+2017-04-29T12:51:40.321 :: getAllTaxInfo :: Arguments 
+2017-04-29T12:52:32.349 :: generateOrder :: Arguments  : Order{orderNumber=145, customerName=Samm, state=PA, productType=Carpet, area=40.0, taxRate=6.75, costPerSquareFoot=2.25, laborCostPerSquareFoot=2.10, materialCost=90.000, laborCost=84.000, tax=25.779, total=199.779, entryDate=2018-12-20}
+2017-04-29T12:52:39.666 :: NullPointerException :: Arguments Order{orderNumber=145, customerName=Samm, state=PA, productType=Carpet, area=40.0, taxRate=6.75, costPerSquareFoot=2.25, laborCostPerSquareFoot=2.10, materialCost=90.000, laborCost=84.000, tax=25.779, total=199.779, entryDate=2018-12-20}
+2017-04-29T12:55:41.724 :: getOrderByNumber :: Arguments  : 2017-04-27 : 145
+2017-04-29T12:55:56.008 :: getAllProductInfo :: Arguments 
+2017-04-29T12:55:56.009 :: getAllTaxInfo :: Arguments 
+2017-04-29T12:56:16.759 :: generateOrder :: Arguments  : Order{orderNumber=145, customerName=SAM, state=PA, productType=Carpet, area=60.0, taxRate=6.75, costPerSquareFoot=2.25, laborCostPerSquareFoot=2.10, materialCost=135.000, laborCost=126.000, tax=38.667, total=299.667, entryDate=2018-10-15}
+2017-04-29T12:56:19.967 :: NullPointerException :: Arguments Order{orderNumber=145, customerName=SAM, state=PA, productType=Carpet, area=60.0, taxRate=6.75, costPerSquareFoot=2.25, laborCostPerSquareFoot=2.10, materialCost=135.000, laborCost=126.000, tax=38.667, total=299.667, entryDate=2018-10-15}
+2017-04-29T13:24:04.535 :: getAllOrders :: Arguments 
+2017-04-29T13:24:23.116 :: getOrderByNumber :: Arguments  : 2017-04-27 : 145
+2017-04-29T13:24:26.435 :: getAllProductInfo :: Arguments 
+2017-04-29T13:24:26.436 :: getAllTaxInfo :: Arguments 
+2017-04-29T13:26:19.123 :: generateOrder :: Arguments  : Order{orderNumber=145, customerName=SMAMM, state=PA, productType=Wood, area=60.0, taxRate=6.75, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75, materialCost=309.000, laborCost=285.000, tax=88.001, total=682.001, entryDate=2000-3-20}
+2017-04-29T13:26:32.958 :: editOrder :: Arguments  : Order{orderNumber=145, customerName=SMAMM, state=PA, productType=Wood, area=60.0, taxRate=6.75, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75, materialCost=309.000, laborCost=285.000, tax=88.001, total=682.001, entryDate=2000-3-20} : Order{orderNumber=145, customerName=SMAMM, state=PA, productType=Wood, area=60.0, taxRate=6.75, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75, materialCost=309.000, laborCost=285.000, tax=88.001, total=682.001, entryDate=2000-3-20}
+2017-04-29T13:26:36.764 :: getAllOrders :: Arguments 
+2017-04-29T15:11:19.489 :: getAllOrders :: Arguments 
+2017-04-29T15:11:42.794 :: getAllProductInfo :: Arguments 
+2017-04-29T15:11:56.835 :: getAllTaxInfo :: Arguments 
+2017-04-29T15:12:13.681 :: getOrderByNumber :: Arguments  : 2017-04-27 : 145
+2017-04-29T15:12:16.287 :: getAllProductInfo :: Arguments 
+2017-04-29T15:12:16.288 :: getAllTaxInfo :: Arguments 
+2017-04-29T15:13:12.240 :: generateOrder :: Arguments  : Order{orderNumber=145, orderDate=2018-05-20, customerName=SAM, area=40.0, productInfo=Product{type=Carpet, costPerSquareFoot=2.25, laborCostPerSquareFoot=2.10}, taxInfo=Tax{state=PA, rate=6.75}, materialCost=90.000, laborCost=84.000, tax=25.779, total=199.779}
+2017-04-29T15:13:27.078 :: editOrder :: Arguments  : Order{orderNumber=145, orderDate=2018-05-20, customerName=SAM, area=40.0, productInfo=Product{type=Carpet, costPerSquareFoot=2.25, laborCostPerSquareFoot=2.10}, taxInfo=Tax{state=PA, rate=6.75}, materialCost=90.000, laborCost=84.000, tax=25.779, total=199.779} : Order{orderNumber=145, orderDate=2018-05-20, customerName=SAM, area=40.0, productInfo=Product{type=Carpet, costPerSquareFoot=2.25, laborCostPerSquareFoot=2.10}, taxInfo=Tax{state=PA, rate=6.75}, materialCost=90.000, laborCost=84.000, tax=25.779, total=199.779}
+2017-04-29T15:13:33.996 :: getAllTaxInfo :: Arguments 
+2017-04-29T15:13:46.833 :: getAllOrders :: Arguments 
+2017-04-29T15:14:35.266 :: saveWork :: Arguments 
+2017-04-29T15:15:25.087 :: getAllOrders :: Arguments 
+2017-04-29T15:16:53.430 :: getOrderByNumber :: Arguments  : 2017-04-27 : 144
+2017-04-29T15:16:56.538 :: removeOrder :: Arguments  : Order{orderNumber=144, orderDate=2017-04-27, customerName=SAMMY, area=60.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=PA, rate=6.75}, materialCost=309.000, laborCost=285.000, tax=88.001, total=682.001}
+2017-04-29T15:17:00.155 :: saveWork :: Arguments 
+2017-04-29T23:55:10.345 :: getAllOrders :: Arguments 
+2017-04-29T23:55:55.412 :: getAllOrders :: Arguments 
+2017-04-29T23:56:26.751 :: getOrderByNumber :: Arguments  : 2017-04-27 : 144
+2017-04-29T23:56:29.359 :: getAllProductInfo :: Arguments 
+2017-04-29T23:56:29.360 :: getAllTaxInfo :: Arguments 
+2017-04-29T23:56:55.232 :: generateOrder :: Arguments  : Order{orderNumber=144, orderDate=2019-05-23, customerName=SAoomm, area=50.0, productInfo=Product{type=Carpet, costPerSquareFoot=2.25, laborCostPerSquareFoot=2.10}, taxInfo=Tax{state=OH, rate=6.25}, materialCost=112.500, laborCost=105.000, tax=34.800, total=252.300}
+2017-04-29T23:56:57.737 :: editOrder :: Arguments  : Order{orderNumber=144, orderDate=2019-05-23, customerName=SAoomm, area=50.0, productInfo=Product{type=Carpet, costPerSquareFoot=2.25, laborCostPerSquareFoot=2.10}, taxInfo=Tax{state=OH, rate=6.25}, materialCost=112.500, laborCost=105.000, tax=34.800, total=252.300} : Order{orderNumber=144, orderDate=2019-05-23, customerName=SAoomm, area=50.0, productInfo=Product{type=Carpet, costPerSquareFoot=2.25, laborCostPerSquareFoot=2.10}, taxInfo=Tax{state=OH, rate=6.25}, materialCost=112.500, laborCost=105.000, tax=34.800, total=252.300}
+2017-04-29T23:57:12.781 :: saveWork :: Arguments 
+2017-04-29T23:59:54.118 :: getAllOrders :: Arguments 
+2017-04-30T00:00:07.697 :: OrderNotFoundException :: Arguments 2017-04-27144
+2017-04-30T09:26:54.283 :: saveWork :: Arguments 
+2017-04-30T09:29:22.525 :: getOrderByNumber :: Arguments  : 2017-04-27 : 144
+2017-04-30T09:29:27.480 :: removeOrder :: Arguments  : Order{orderNumber=144, orderDate=2017-04-27, customerName=SAoomm, area=50.0, productInfo=Product{type=Carpet, costPerSquareFoot=2.25, laborCostPerSquareFoot=2.10}, taxInfo=Tax{state=OH, rate=6.25}, materialCost=112.500, laborCost=105.000, tax=34.800, total=252.300}
+2017-04-30T09:29:30.106 :: saveWork :: Arguments 
+2017-04-30T09:36:07.994 :: getAllOrders :: Arguments 
+2017-04-30T09:37:39.809 :: getOrderByNumber :: Arguments  : 2018-05-20 : 145
+2017-04-30T09:37:42.817 :: getAllProductInfo :: Arguments 
+2017-04-30T09:37:42.818 :: getAllTaxInfo :: Arguments 
+2017-04-30T09:38:40.483 :: generateOrder :: Arguments  : Order{orderNumber=145, orderDate=2019-06-24, customerName=Sammy Baby, area=40.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=OH, rate=6.25}, materialCost=206.000, laborCost=190.000, tax=63.360, total=459.360}
+2017-04-30T09:38:45.296 :: editOrder :: Arguments  : Order{orderNumber=145, orderDate=2019-06-24, customerName=Sammy Baby, area=40.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=OH, rate=6.25}, materialCost=206.000, laborCost=190.000, tax=63.360, total=459.360} : Order{orderNumber=145, orderDate=2019-06-24, customerName=Sammy Baby, area=40.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=OH, rate=6.25}, materialCost=206.000, laborCost=190.000, tax=63.360, total=459.360}
+2017-04-30T09:39:00.741 :: getAllOrders :: Arguments 
+2017-04-30T09:39:44.362 :: getOrdersByDate :: Arguments  : 2018-05-20
+2017-04-30T09:40:35.886 :: getAllTaxInfo :: Arguments 
+2017-04-30T09:40:40.612 :: saveWork :: Arguments 
+2017-04-30T10:11:01.729 :: getAllOrders :: Arguments 
+2017-04-30T10:11:48.108 :: getOrdersByDate :: Arguments  : 2019-06-24
+2017-04-30T10:12:07.864 :: OrderNotFoundException :: Arguments 2018-5-20
+2017-04-30T10:12:50.493 :: saveWork :: Arguments 
+2017-04-30T10:14:08.927 :: getAllOrders :: Arguments 
+2017-04-30T10:18:00.137 :: getOrderByNumber :: Arguments  : 2019-06-24 : 146
+2017-04-30T10:18:05.953 :: getAllProductInfo :: Arguments 
+2017-04-30T10:18:05.954 :: getAllTaxInfo :: Arguments 
+2017-04-30T10:18:35.940 :: generateOrder :: Arguments  : Order{orderNumber=146, orderDate=2020-04-29, customerName=SAMMY BOY, area=40.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=OH, rate=6.25}, materialCost=206.000, laborCost=190.000, tax=63.360, total=459.360}
+2017-04-30T10:18:38.546 :: editOrder :: Arguments  : Order{orderNumber=146, orderDate=2020-04-29, customerName=SAMMY BOY, area=40.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=OH, rate=6.25}, materialCost=206.000, laborCost=190.000, tax=63.360, total=459.360} : Order{orderNumber=146, orderDate=2020-04-29, customerName=SAMMY BOY, area=40.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=OH, rate=6.25}, materialCost=206.000, laborCost=190.000, tax=63.360, total=459.360}
+2017-04-30T10:18:49.077 :: getAllOrders :: Arguments 
+2017-04-30T10:19:09.734 :: getOrdersByDate :: Arguments  : 2019-06-24
+2017-04-30T10:19:26.681 :: getOrdersByDate :: Arguments  : 2020-04-29
+2017-04-30T10:23:21.903 :: getAllOrders :: Arguments 
+2017-04-30T10:24:08.369 :: getOrderByNumber :: Arguments  : 2019-06-24 : 146
+2017-04-30T10:24:11.278 :: getAllProductInfo :: Arguments 
+2017-04-30T10:24:11.279 :: getAllTaxInfo :: Arguments 
+2017-04-30T10:24:29.226 :: generateOrder :: Arguments  : Order{orderNumber=146, orderDate=2020-03-19, customerName=SAMMMM, area=90.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=OH, rate=6.25}, materialCost=463.500, laborCost=427.500, tax=142.560, total=1033.560}
+2017-04-30T10:24:33.337 :: OrderNotFoundException :: Arguments Order{orderNumber=146, orderDate=2020-03-19, customerName=SAMMMM, area=90.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=OH, rate=6.25}, materialCost=463.500, laborCost=427.500, tax=142.560, total=1033.560}Order{orderNumber=146, orderDate=2020-03-19, customerName=SAMMMM, area=90.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=OH, rate=6.25}, materialCost=463.500, laborCost=427.500, tax=142.560, total=1033.560}
+2017-04-30T10:24:38.350 :: getAllOrders :: Arguments 
+2017-04-30T10:24:54.091 :: getOrdersByDate :: Arguments  : 2019-06-24
+2017-04-30T10:25:39.232 :: saveWork :: Arguments 
+2017-04-30T10:25:49.546 :: getAllOrders :: Arguments 
+2017-04-30T10:26:01.374 :: getOrdersByDate :: Arguments  : 2019-06-24
+2017-04-30T10:27:13.503 :: saveWork :: Arguments 
+2017-04-30T10:52:05.061 :: getAllOrders :: Arguments 
+2017-04-30T10:52:17.832 :: getOrderByNumber :: Arguments  : 2020-03-19 : 146
+2017-04-30T10:52:19.836 :: getAllProductInfo :: Arguments 
+2017-04-30T10:52:19.837 :: getAllTaxInfo :: Arguments 
+2017-04-30T10:52:39.002 :: generateOrder :: Arguments  : Order{orderNumber=146, orderDate=2021-10-19, customerName=SAMM, area=10.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=OH, rate=6.25}, materialCost=51.500, laborCost=47.500, tax=15.840, total=114.840}
+2017-04-30T10:52:42.611 :: OrderNotFoundException :: Arguments Order{orderNumber=146, orderDate=2021-10-19, customerName=SAMM, area=10.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=OH, rate=6.25}, materialCost=51.500, laborCost=47.500, tax=15.840, total=114.840}Order{orderNumber=146, orderDate=2021-10-19, customerName=SAMM, area=10.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=OH, rate=6.25}, materialCost=51.500, laborCost=47.500, tax=15.840, total=114.840}
+2017-04-30T10:52:50.432 :: getAllOrders :: Arguments 
+2017-04-30T10:53:07.376 :: getAllOrders :: Arguments 
+2017-04-30T10:53:18.409 :: getOrdersByDate :: Arguments  : 2020-03-19
+2017-04-30T10:53:30.340 :: OrderNotFoundException :: Arguments 2021-10-19
+2017-04-30T10:53:45.403 :: saveWork :: Arguments 
+2017-04-30T10:53:45.420 :: saveWork :: Arguments 
+2017-04-30T10:53:59.726 :: OrderNotFoundException :: Arguments 2020-03-19
+2017-04-30T10:54:37.432 :: getAllOrders :: Arguments 
+2017-04-30T11:37:17.873 :: getAllOrders :: Arguments 
+2017-04-30T11:38:11.073 :: getOrderByNumber :: Arguments  : 2021-10-19 : 146
+2017-04-30T11:38:26.012 :: getAllProductInfo :: Arguments 
+2017-04-30T11:38:26.013 :: getAllTaxInfo :: Arguments 
+2017-04-30T11:40:26.615 :: generateOrder :: Arguments  : Order{orderNumber=146, orderDate=2030-03-15, customerName=SOM, area=100.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=PA, rate=6.75}, materialCost=515.000, laborCost=475.000, tax=146.668, total=1136.668}
+2017-04-30T11:41:11.442 :: OrderNotFoundException :: Arguments Order{orderNumber=146, orderDate=2030-03-15, customerName=SOM, area=100.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=PA, rate=6.75}, materialCost=515.000, laborCost=475.000, tax=146.668, total=1136.668}Order{orderNumber=146, orderDate=2030-03-15, customerName=SOM, area=100.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=PA, rate=6.75}, materialCost=515.000, laborCost=475.000, tax=146.668, total=1136.668}
+2017-04-30T11:41:55.963 :: getAllOrders :: Arguments 
+2017-04-30T11:54:47.583 :: getAllOrders :: Arguments 
+2017-04-30T11:55:30.855 :: getOrderByNumber :: Arguments  : 2021-10-19 : 146
+2017-04-30T11:55:34.065 :: getAllProductInfo :: Arguments 
+2017-04-30T11:55:34.066 :: getAllTaxInfo :: Arguments 
+2017-04-30T11:55:50.609 :: generateOrder :: Arguments  : Order{orderNumber=146, orderDate=2030-12-30, customerName=SOOP, area=60.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=PA, rate=6.75}, materialCost=309.000, laborCost=285.000, tax=88.001, total=682.001}
+2017-04-30T11:55:53.215 :: OrderNotFoundException :: Arguments Order{orderNumber=146, orderDate=2030-12-30, customerName=SOOP, area=60.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=PA, rate=6.75}, materialCost=309.000, laborCost=285.000, tax=88.001, total=682.001}Order{orderNumber=146, orderDate=2030-12-30, customerName=SOOP, area=60.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=PA, rate=6.75}, materialCost=309.000, laborCost=285.000, tax=88.001, total=682.001}
+2017-04-30T12:00:17.427 :: getOrderByNumber :: Arguments  : 2017-04-27 : 144
+2017-04-30T12:00:20.471 :: getAllProductInfo :: Arguments 
+2017-04-30T12:00:20.472 :: getAllTaxInfo :: Arguments 
+2017-04-30T12:00:35.323 :: generateOrder :: Arguments  : Order{orderNumber=144, orderDate=2030-12-10, customerName=SAM, area=40.0, productInfo=Product{type=Carpet, costPerSquareFoot=2.25, laborCostPerSquareFoot=2.10}, taxInfo=Tax{state=PA, rate=6.75}, materialCost=90.000, laborCost=84.000, tax=25.779, total=199.779}
+2017-04-30T12:00:39.535 :: OrderNotFoundException :: Arguments Order{orderNumber=144, orderDate=2030-12-10, customerName=SAM, area=40.0, productInfo=Product{type=Carpet, costPerSquareFoot=2.25, laborCostPerSquareFoot=2.10}, taxInfo=Tax{state=PA, rate=6.75}, materialCost=90.000, laborCost=84.000, tax=25.779, total=199.779}Order{orderNumber=144, orderDate=2030-12-10, customerName=SAM, area=40.0, productInfo=Product{type=Carpet, costPerSquareFoot=2.25, laborCostPerSquareFoot=2.10}, taxInfo=Tax{state=PA, rate=6.75}, materialCost=90.000, laborCost=84.000, tax=25.779, total=199.779}
+2017-04-30T12:05:14.001 :: getAllOrders :: Arguments 
+2017-04-30T12:05:26.551 :: getOrderByNumber :: Arguments  : 2021-10-19 : 146
+2017-04-30T12:05:29.458 :: getAllProductInfo :: Arguments 
+2017-04-30T12:05:29.459 :: getAllTaxInfo :: Arguments 
+2017-04-30T12:05:45.109 :: generateOrder :: Arguments  : Order{orderNumber=146, orderDate=2030-12-14, customerName=SM, area=50.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=OH, rate=6.25}, materialCost=257.500, laborCost=237.500, tax=79.200, total=574.200}
+2017-04-30T12:05:47.214 :: OrderNotFoundException :: Arguments Order{orderNumber=146, orderDate=2030-12-14, customerName=SM, area=50.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=OH, rate=6.25}, materialCost=257.500, laborCost=237.500, tax=79.200, total=574.200}Order{orderNumber=146, orderDate=2030-12-14, customerName=SM, area=50.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=OH, rate=6.25}, materialCost=257.500, laborCost=237.500, tax=79.200, total=574.200}
+2017-05-03T13:39:47.180 :: getAllOrders :: Arguments 
+2017-05-03T13:40:29.366 :: getOrderByNumber :: Arguments  : 2021-10-19 : 146
+2017-05-03T13:40:33.772 :: getAllProductInfo :: Arguments 
+2017-05-03T13:40:33.772 :: getAllTaxInfo :: Arguments 
+2017-05-03T13:40:55.997 :: generateOrder :: Arguments  : Order{orderNumber=146, orderDate=2019-06-24, customerName=Sam, area=40.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=PA, rate=6.75}, materialCost=206.000, laborCost=190.000, tax=58.668, total=454.668}
+2017-05-03T13:41:04.806 :: OrderNotFoundException :: Arguments Order{orderNumber=146, orderDate=2019-06-24, customerName=Sam, area=40.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=PA, rate=6.75}, materialCost=206.000, laborCost=190.000, tax=58.668, total=454.668}Order{orderNumber=146, orderDate=2019-06-24, customerName=Sam, area=40.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=PA, rate=6.75}, materialCost=206.000, laborCost=190.000, tax=58.668, total=454.668}
+2017-05-03T13:44:14.305 :: getAllOrders :: Arguments 
+2017-05-03T13:44:26.734 :: getOrderByNumber :: Arguments  : 2021-10-19 : 146
+2017-05-03T13:44:31.640 :: getAllProductInfo :: Arguments 
+2017-05-03T13:44:31.640 :: getAllTaxInfo :: Arguments 
+2017-05-03T13:44:53.369 :: generateOrder :: Arguments  : Order{orderNumber=146, orderDate=2019-06-24, customerName=Sam, area=40.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=PA, rate=6.75}, materialCost=206.000, laborCost=190.000, tax=58.668, total=454.668}
+2017-05-03T13:51:17.250 :: getAllOrders :: Arguments 
+2017-05-03T13:51:34.185 :: getOrderByNumber :: Arguments  : 2021-10-19 : 146
+2017-05-03T13:51:36.287 :: getAllProductInfo :: Arguments 
+2017-05-03T13:51:36.287 :: getAllTaxInfo :: Arguments 
+2017-05-04T10:01:53.222 :: getAllOrders :: Arguments 
+2017-05-04T10:02:13.012 :: getOrderByNumber :: Arguments  : 2021-10-19 : 146
+2017-05-04T10:02:25.345 :: getAllProductInfo :: Arguments 
+2017-05-04T10:02:25.346 :: getAllTaxInfo :: Arguments 
+2017-05-04T10:02:57.526 :: generateOrder :: Arguments  : Order{orderNumber=0, orderDate=2019-06-24, customerName=Sammy baby, area=50.0, productInfo=Product{type=Carpet, costPerSquareFoot=2.25, laborCostPerSquareFoot=2.10}, taxInfo=Tax{state=PA, rate=6.75}, materialCost=112.500, laborCost=105.000, tax=32.223, total=249.723}
+2017-05-04T10:05:15.463 :: getOrderByNumber :: Arguments  : 2021-10-19 : 146
+2017-05-04T10:05:27.965 :: getAllProductInfo :: Arguments 
+2017-05-04T10:05:27.966 :: getAllTaxInfo :: Arguments 
+2017-05-04T10:05:44.207 :: generateOrder :: Arguments  : Order{orderNumber=146, orderDate=2019-06-24, customerName=Sam, area=40.0, productInfo=Product{type=Carpet, costPerSquareFoot=2.25, laborCostPerSquareFoot=2.10}, taxInfo=Tax{state=PA, rate=6.75}, materialCost=90.000, laborCost=84.000, tax=25.779, total=199.779}
+2017-05-04T10:05:51.327 :: editOrder :: Arguments  : Order{orderNumber=146, orderDate=2021-10-19, customerName=SAMM, area=10.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=OH, rate=6.25}, materialCost=51.500, laborCost=47.500, tax=15.840, total=114.840} : Order{orderNumber=146, orderDate=2019-06-24, customerName=Sam, area=40.0, productInfo=Product{type=Carpet, costPerSquareFoot=2.25, laborCostPerSquareFoot=2.10}, taxInfo=Tax{state=PA, rate=6.75}, materialCost=90.000, laborCost=84.000, tax=25.779, total=199.779}
+2017-05-04T10:06:26.024 :: OrderNotFoundException :: Arguments 2021-10-19
+2017-05-04T10:10:14.788 :: getOrdersByDate :: Arguments  : 2019-06-24
+2017-05-04T10:10:23.406 :: saveWork :: Arguments 
+2017-05-04T10:10:23.437 :: saveWork :: Arguments 
+2017-05-04T10:10:27.121 :: getAllOrders :: Arguments 
+2017-05-04T11:34:54.834 :: getAllProductInfo :: Arguments 
+2017-05-04T11:34:54.838 :: getAllTaxInfo :: Arguments 
+2017-05-04T11:38:20.252 :: generateOrder :: Arguments  : Order{orderNumber=0, orderDate=2021-12-31, customerName=Sam, area=40.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=OH, rate=6.25}, materialCost=206.000, laborCost=190.000, tax=63.360, total=459.360}
+2017-05-06T11:56:30.299 :: getAllOrders
+2017-05-06T11:57:11.945 :: getOrderByNumber :: Arguments : 2019-06-24 : 146
+2017-05-06T11:57:14.751 :: getAllProductInfo
+2017-05-06T11:57:14.752 :: getAllTaxInfo
+2017-05-06T11:57:36.907 :: generateOrder :: Arguments : Order{orderNumber=146, orderDate=2019-07-24, customerName=Sam, area=40.0, productInfo=Product{type=Carpet, costPerSquareFoot=2.25, laborCostPerSquareFoot=2.10}, taxInfo=Tax{state=PA, rate=6.75}, materialCost=90.000, laborCost=84.000, tax=25.779, total=199.779}
+2017-05-06T11:57:54.846 :: editOrder :: Arguments : Order{orderNumber=146, orderDate=2019-06-24, customerName=Sam, area=40.0, productInfo=Product{type=Carpet, costPerSquareFoot=2.25, laborCostPerSquareFoot=2.10}, taxInfo=Tax{state=PA, rate=6.75}, materialCost=90.000, laborCost=84.000, tax=25.779, total=199.779} : Order{orderNumber=146, orderDate=2019-07-24, customerName=Sam, area=40.0, productInfo=Product{type=Carpet, costPerSquareFoot=2.25, laborCostPerSquareFoot=2.10}, taxInfo=Tax{state=PA, rate=6.75}, materialCost=90.000, laborCost=84.000, tax=25.779, total=199.779}
+2017-05-06T11:58:00.459 :: getAllOrders
+2017-05-06T11:58:54.678 :: getOrdersByDate :: Arguments : 2019-07-24
+2017-05-06T11:59:00.914 :: saveWork
+2017-05-06T12:01:50.826 :: getOrderByNumber :: Arguments : 2019-07-24 : 146
+2017-05-06T12:01:53.070 :: getAllProductInfo
+2017-05-06T12:01:53.071 :: getAllTaxInfo
+2017-05-06T12:03:16.379 :: generateOrder :: Arguments : Order{orderNumber=146, orderDate=2019-07-24, customerName=Sam, area=60.0, productInfo=Product{type=Carpet, costPerSquareFoot=2.25, laborCostPerSquareFoot=2.10}, taxInfo=Tax{state=OH, rate=6.25}, materialCost=135.000, laborCost=126.000, tax=41.760, total=302.760}
+2017-05-06T12:03:23.897 :: editOrder :: Arguments : Order{orderNumber=146, orderDate=2019-07-24, customerName=Sam, area=40.0, productInfo=Product{type=Carpet, costPerSquareFoot=2.25, laborCostPerSquareFoot=2.10}, taxInfo=Tax{state=PA, rate=6.75}, materialCost=90.000, laborCost=84.000, tax=25.779, total=199.779} : Order{orderNumber=146, orderDate=2019-07-24, customerName=Sam, area=60.0, productInfo=Product{type=Carpet, costPerSquareFoot=2.25, laborCostPerSquareFoot=2.10}, taxInfo=Tax{state=OH, rate=6.25}, materialCost=135.000, laborCost=126.000, tax=41.760, total=302.760}
+2017-05-06T12:03:28.597 :: saveWork
+2017-05-25T15:40:04.965 :: getAllOrders
+2017-05-25T15:42:03.725 :: getOrderByNumber :: Arguments : 2019-06-24 : 145
+2017-05-25T15:42:10.342 :: getAllProductInfo
+2017-05-25T15:42:10.343 :: getAllTaxInfo
+2017-05-25T15:42:45.332 :: generateOrder :: Arguments : Order{orderNumber=145, orderDate=2019-06-24, customerName=Sammy Baby, area=50.0, productInfo=Product{type=Laminate, costPerSquareFoot=1.75, laborCostPerSquareFoot=2.10}, taxInfo=Tax{state=PA, rate=6.75}, materialCost=87.500, laborCost=105.000, tax=28.519, total=221.019}
+2017-05-25T15:42:51.846 :: editOrder :: Arguments : Order{orderNumber=145, orderDate=2019-06-24, customerName=Sammy Baby, area=40.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=OH, rate=6.25}, materialCost=206.000, laborCost=190.000, tax=63.360, total=459.360} : Order{orderNumber=145, orderDate=2019-06-24, customerName=Sammy Baby, area=50.0, productInfo=Product{type=Laminate, costPerSquareFoot=1.75, laborCostPerSquareFoot=2.10}, taxInfo=Tax{state=PA, rate=6.75}, materialCost=87.500, laborCost=105.000, tax=28.519, total=221.019}
+2017-05-25T15:42:54.654 :: getAllOrders
+2017-08-12T23:47:15.478 :: getAllOrders
+2017-08-12T23:47:25.644 :: getAllProductInfo
+2017-08-12T23:47:25.645 :: getAllTaxInfo
+2017-08-12T23:48:49.582 :: generateOrder :: Arguments : Order{orderNumber=0, orderDate=2017-08-12, customerName=Sammy, area=100.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=PA, rate=6.75}, materialCost=515.000, laborCost=475.000, tax=146.668, total=1136.668}
+2017-08-12T23:49:30.598 :: addOrder :: Arguments : Order{orderNumber=503, orderDate=2017-08-12, customerName=Sammy, area=100.0, productInfo=Product{type=Wood, costPerSquareFoot=5.15, laborCostPerSquareFoot=4.75}, taxInfo=Tax{state=PA, rate=6.75}, materialCost=515.000, laborCost=475.000, tax=146.668, total=1136.668}
+2017-08-12T23:50:53.208 :: OrderNotFoundException :: Arguments2017-08-12123
+2017-08-12T23:50:58.524 :: getAllOrders
+2017-08-12T23:52:34.894 :: getAllProductInfo
+2017-08-12T23:53:07.685 :: getAllTaxInfo
+2017-08-12T23:53:23.624 :: saveWork

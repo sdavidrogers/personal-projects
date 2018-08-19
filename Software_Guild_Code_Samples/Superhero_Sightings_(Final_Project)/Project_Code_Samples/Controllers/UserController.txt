@@ -1,0 +1,135 @@
+package com.sg.superherosightings.controller;
+
+import com.sg.superherosightings.dto.User;
+import com.sg.superherosightings.service.UserService;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+@Controller
+public class UserController {
+
+    
+    
+    private final UserService service;
+    private final PasswordEncoder encoder;
+
+    
+    
+    @Inject
+    public UserController(UserService service, PasswordEncoder encoder) {
+        this.service = service;
+        this.encoder = encoder;
+    }
+
+    
+    
+    // This endpoint retrieves all users from the database and puts the
+    // List of users on the model
+    @RequestMapping(value = "/displayUsersPage", method = RequestMethod.GET)
+    public String displayUserList(Model model) {
+        model.addAttribute("users", service.getAllUsers());
+        return "Users";
+    }
+    
+    
+    
+    // This endpoint just displays the Add User form
+    @RequestMapping(value = "/displayAddUser", method = RequestMethod.GET)
+    public String displayUserForm() {
+        return "UserAdd";
+    }
+    
+    
+    
+    // This endpoint processes the form data and creates a new User
+    @RequestMapping(value = "/addUser", method = RequestMethod.POST)
+    public String addUser(HttpServletRequest req, Model model) {
+        User newUser = new User();
+        // Check to see that username is unique
+        if (validateUsername(req.getParameter("username"))) {
+            newUser.setUsername(req.getParameter("username"));
+        } else {
+            model.addAttribute("duplicateUsername", "ERROR: Username already exists.");
+            return "UserAdd";
+        }
+        // Hash password
+        String clearPw = req.getParameter("password");
+        String hashPw = encoder.encode(clearPw);
+        newUser.setPassword(hashPw);
+        // All users have ROLE_USER, only add ROLE_ADMIN if user type is 'admin'
+        newUser.addAuthority("ROLE_USER");
+        if (req.getParameter("userTypeSelect").equals("Admin")) {
+            newUser.addAuthority("ROLE_ADMIN");
+        }
+        // Now add user type to object
+        newUser.setUserType(req.getParameter("userTypeSelect"));
+
+        service.addUser(newUser);
+
+        return "redirect:/displayUsersPage";
+    }
+    
+    
+    
+    // This endpoint deletes the specified User
+    @RequestMapping(value = "/deleteUser", method = RequestMethod.GET)
+    public String deletUser(HttpServletRequest request) {
+        service.deleteUser(request.getParameter("username"));
+        return "redirect:/displayUsersPage";
+    }
+    
+    
+    
+    @RequestMapping(value = "/displayEditUser", method = RequestMethod.GET)
+    public String displayEditUser(HttpServletRequest request, Model model) {
+        User user = service.getUserByUsername(request.getParameter("username"));
+        model.addAttribute("user", user);
+        return "UserEdit";
+    }
+    
+    
+    
+    @RequestMapping(value = "/editUser", method = RequestMethod.POST)
+    public String editUser(@ModelAttribute("user") User updatedUser,
+            HttpServletRequest request, Model model) {
+        // Check to see that username is unique
+        if (!validateUsername(updatedUser.getUsername()) && 
+                updatedUser.getId() != service.getUserByUsername(updatedUser.getUsername()).getId()) {
+            model.addAttribute("duplicateUsername", "ERROR: Username already exists.");
+            return "UserEdit";
+        }
+        // Hash password
+        String clearPw = request.getParameter("password");
+        String hashPw = encoder.encode(clearPw);
+        updatedUser.setPassword(hashPw);
+        // All users have ROLE_USER, only add ROLE_ADMIN user type is 'admin'
+        updatedUser.addAuthority("ROLE_USER");
+        if (updatedUser.getUserType().equals("Admin")) {
+            updatedUser.addAuthority("ROLE_ADMIN");
+        }
+
+        service.updateUser(updatedUser);
+
+        return "redirect:/displayUsersPage";
+    }
+    
+    
+    
+    private boolean validateUsername(String username) {
+        for (User user : service.getAllUsers()) {
+            if (user.getUsername().equals(username)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    
+    
+}

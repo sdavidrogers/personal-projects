@@ -1,0 +1,135 @@
+package com.sg.superherosightings.service;
+
+import com.sg.superherosightings.dto.Power;
+import com.sg.superherosightings.dto.Super;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.After;
+import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+
+public class PowerServiceJdbcImplTest {
+    
+    private PowerService powerService;
+    private SuperService superService;
+    
+    public PowerServiceJdbcImplTest() {
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("test-applicationContext.xml");
+        powerService = ctx.getBean("powerService", PowerService.class);
+        superService = ctx.getBean("superService", SuperService.class);
+    }
+    
+    @BeforeClass
+    public static void setUpClass() {
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+    }
+    
+    @Before
+    public void setUp() {
+        for (Power currentPower : powerService.getAllPowers()) {
+            powerService.removePower(currentPower.getPowerId());
+        }
+        
+        for (Super currentSuper : superService.getAllSupers()) {
+            superService.removeSuper(currentSuper.getSuperId());
+        }
+    }
+    
+    @After
+    public void tearDown() {
+        for (Power currentPower : powerService.getAllPowers()) {
+            powerService.removePower(currentPower.getPowerId());
+        }
+        
+        for (Super currentSuper : superService.getAllSupers()) {
+            superService.removeSuper(currentSuper.getSuperId());
+        }
+    }
+
+    @Test
+    public void testAddGetPower() {
+        Power power = new Power();
+        power.setPowerName("Flight");
+        power.setDescription("They can fly.");
+        
+        power = powerService.addPower(power);
+        assertEquals(power, powerService.getPowerById(power.getPowerId()));
+    }
+
+    @Test
+    public void testRemovePower() {
+        Power power = new Power();
+        power.setPowerName("Flight");
+        power.setDescription("They can fly.");
+        
+        power = powerService.addPower(power);
+        assertEquals(power, powerService.getPowerById(power.getPowerId()));
+        
+        powerService.removePower(power.getPowerId());
+        assertNull(powerService.getPowerById(power.getPowerId()));
+    }
+
+    @Test
+    public void testUpdatePower() {
+        Power power = new Power();
+        power.setPowerName("Flight");
+        power.setDescription("They can fly.");
+        
+        power = powerService.addPower(power);
+        power.setPowerName("Invisibility");
+        powerService.updatePower(power);
+        assertEquals(power, powerService.getPowerById(power.getPowerId()));
+    }
+
+    @Test
+    public void testGetAllPowers() {
+        Power power = new Power();
+        power.setPowerName("Flight");
+        power.setDescription("They can fly.");
+        powerService.addPower(power);
+        
+        Power powerTwo = new Power();
+        powerTwo.setPowerName("Strength");
+        powerTwo.setDescription("They are strong.");
+        powerService.addPower(powerTwo);
+        
+        assertEquals(2, powerService.getAllPowers().size());
+    }
+
+    @Test
+    public void testGetAllPowersForSuper() {
+        List<Power> powers = new ArrayList<>();
+        
+        Power power = new Power();
+        power.setPowerName("Flight");
+        power.setDescription("They can fly.");
+        power = powerService.addPower(power);
+        powers.add(power);
+        
+        Power powerTwo = new Power();
+        powerTwo.setPowerName("Strength");
+        powerTwo.setDescription("They are strong.");
+        powerTwo = powerService.addPower(powerTwo);
+        powers.add(powerTwo);
+        
+        Super addSuper = new Super();
+        addSuper.setAlias("Bad Boy");
+        addSuper.setSuperType("Villain");
+        addSuper.setDescription("One bad boy.");
+        addSuper.setPowers(powers);
+        addSuper = superService.addSuper(addSuper);
+        
+        assertEquals(2, powerService.getAllPowersForSuper(addSuper.getSuperId()).size());
+    }
+    
+}

@@ -1,0 +1,103 @@
+package com.sg.superherosightings.controller;
+
+import com.sg.superherosightings.dto.Organization;
+import com.sg.superherosightings.service.OrganizationService;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+
+@Controller
+public class OrganizationController {
+    
+    
+    
+    OrganizationService service;
+    
+    
+    
+    @Inject
+    public OrganizationController(OrganizationService service) {
+        this.service = service;
+    }
+    
+    
+    
+    @RequestMapping(value = "/displayOrganizationsPage", method = RequestMethod.GET)
+    public String displayOrganizationsPage(Model model) {
+        model.addAttribute("organizationList", service.getAllOrganizations());
+        return "Organizations";
+    }
+    
+    
+    
+    @RequestMapping(value = "/displayOrganization", method = RequestMethod.GET)
+    public String displayOrganization(HttpServletRequest request, Model model) {
+        long organizationId = Long.parseLong(request.getParameter("organizationId"));
+        model.addAttribute("organization", service.getOrganizationById(organizationId));
+        return "OrganizationDisplay";
+    }
+    
+    
+    
+    @RequestMapping(value = "/deleteOrganization", method = RequestMethod.GET)
+    public String deleteOrganization(HttpServletRequest request) {
+        long organizationId = Long.parseLong(request.getParameter("organizationId"));
+        service.removeOrganization(organizationId);
+        return "redirect:/displayOrganizationsPage";
+    }
+    
+    
+    
+    @RequestMapping(value = "/displayAddOrganization", method = RequestMethod.GET)
+    public String displayAddOrganization() {
+        return "OrganizationAdd";
+    }
+    
+    
+    
+    @RequestMapping(value = "/addOrganization", method = RequestMethod.POST)
+    public String addOrganization(HttpServletRequest request) {
+        Organization organization = new Organization();
+        organization.setOrganizationName(request.getParameter("name"));
+        organization.setDescription(request.getParameter("description"));
+        organization.setAddress(request.getParameter("address"));
+        organization.setPhone(request.getParameter("phone"));
+        service.addOrganization(organization);
+        return "redirect:/displayOrganizationsPage";
+    }
+    
+    
+    
+    @RequestMapping(value = "/displayEditOrganization", method = RequestMethod.GET)
+    public String displayEditOrganization(HttpServletRequest request, Model model) {
+        long organizationId = Long.parseLong(request.getParameter("organizationId"));
+        model.addAttribute("organization", service.getOrganizationById(organizationId));
+        return "OrganizationEdit";
+    }
+    
+    
+    
+    @RequestMapping(value = "/editOrganization", method = RequestMethod.POST)
+    public String editOrganization(@Valid @ModelAttribute("organization") Organization organization, BindingResult result) {
+        if (result.hasErrors()) {
+            return "OrganizationEdit";
+        }
+        Organization editedOrganization = service.getOrganizationById(organization.getOrganizationId());
+        editedOrganization.setOrganizationName(organization.getOrganizationName());
+        editedOrganization.setDescription(organization.getDescription());
+        editedOrganization.setAddress(organization.getAddress());
+        editedOrganization.setPhone(organization.getPhone());
+        service.updateOrganization(editedOrganization);
+        return "redirect:/displayOrganizationsPage";
+    }
+    
+    
+    
+}

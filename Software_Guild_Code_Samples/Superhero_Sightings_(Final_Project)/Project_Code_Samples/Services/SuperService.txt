@@ -1,0 +1,208 @@
+package com.sg.superherosightings.service;
+
+import com.sg.superherosightings.dao.OrganizationDao;
+import com.sg.superherosightings.dao.PowerDao;
+import com.sg.superherosightings.dao.SightingDao;
+import com.sg.superherosightings.dao.SuperDao;
+import com.sg.superherosightings.dao.SuperOrganizationDao;
+import com.sg.superherosightings.dao.SuperPowerDao;
+import com.sg.superherosightings.dao.SuperSightingDao;
+import com.sg.superherosightings.dto.Organization;
+import com.sg.superherosightings.dto.Power;
+import com.sg.superherosightings.dto.Super;
+import com.sg.superherosightings.dto.SuperOrganization;
+import com.sg.superherosightings.dto.SuperPower;
+import java.util.List;
+import javax.inject.Inject;
+
+
+public class SuperServiceJdbcImpl implements SuperService {
+    
+    
+    
+    private final SuperDao superDao;
+    private final PowerDao powerDao;
+    private final OrganizationDao organizationDao;
+    private final SightingDao sightingDao;
+    private final SuperPowerDao superPowerDao;
+    private final SuperOrganizationDao superOrganizationDao;
+    private final SuperSightingDao superSightingDao;
+    
+    
+    
+    @Inject
+    public SuperServiceJdbcImpl(SuperDao superDao, PowerDao powerDao, 
+            OrganizationDao organizationDao,
+            SightingDao sightingDao, SuperPowerDao superPowerDao,
+            SuperOrganizationDao superOrganizationDao, SuperSightingDao superSightingDao) {
+        this.superDao = superDao;
+        this.powerDao = powerDao;
+        this.organizationDao = organizationDao;
+        this.sightingDao = sightingDao;
+        this.superPowerDao = superPowerDao;
+        this.superOrganizationDao = superOrganizationDao;
+        this.superSightingDao = superSightingDao;
+    }
+
+    
+    
+    @Override
+    public Super addSuper(Super addSuper) {
+        addSuper.setSuperId(superDao.addSuper(addSuper).getSuperId());
+        List<Organization> organizations = addSuper.getOrganizations();
+        if (organizations != null && organizations.size() > 0) {
+            SuperOrganization superOrganization = new SuperOrganization();
+            superOrganization.setSuper(addSuper);
+            for (Organization currentOrganization : organizations) {
+                superOrganization.setOrganization(currentOrganization);
+                superOrganizationDao.addSuperOrganizationPair(superOrganization);
+            }
+        }
+        List<Power> powers = addSuper.getPowers();
+        if (powers != null && powers.size() > 0) {
+            SuperPower superPower = new SuperPower();
+            superPower.setSuper(addSuper);
+            for (Power currentPower : powers) {
+                superPower.setPower(currentPower);
+                superPowerDao.addSuperPowerPair(superPower);
+            }
+        }
+        return addSuper;
+    }
+
+    
+    
+    @Override
+    public void removeSuper(long superId) {
+        superPowerDao.deletePairsBySuper(superId);
+        superOrganizationDao.deletePairsBySuper(superId);
+        superSightingDao.deletePairsBySuper(superId);
+        superDao.removeSuper(superId);
+    }
+
+    
+    
+    @Override
+    public void updateSuper(Super updateSuper) {
+        superPowerDao.deletePairsBySuper(updateSuper.getSuperId());
+        superOrganizationDao.deletePairsBySuper(updateSuper.getSuperId());
+        List<Organization> organizations = updateSuper.getOrganizations();
+        if (organizations != null && organizations.size() > 0) {
+            SuperOrganization superOrganization = new SuperOrganization();
+            superOrganization.setSuper(updateSuper);
+            for (Organization currentOrganization : organizations) {
+                superOrganization.setOrganization(currentOrganization);
+                superOrganizationDao.addSuperOrganizationPair(superOrganization);
+            }
+        }
+        List<Power> powers = updateSuper.getPowers();
+        if (powers != null && powers.size() > 0) {
+            SuperPower superPower = new SuperPower();
+            superPower.setSuper(updateSuper);
+            for (Power currentPower : powers) {
+                superPower.setPower(currentPower);
+                superPowerDao.addSuperPowerPair(superPower);
+            }
+        }
+        superDao.updateSuper(updateSuper);
+    }
+
+    
+    
+    @Override
+    public List<Super> getAllSupers() {
+        List<Super> supers = superDao.getAllSupers();
+        for (Super currentSuper : supers) {
+            currentSuper.setPowers(powerDao
+                    .getAllPowersForSuper(currentSuper.getSuperId()));
+            currentSuper.setOrganizations(organizationDao
+                    .getAllOrganizationsForSuper(currentSuper.getSuperId()));
+            currentSuper.setSightings(sightingDao
+                    .getAllSightingsWithSuper(currentSuper.getSuperId()));
+        }
+        return supers;
+    }
+
+    
+    
+    @Override
+    public Super getSuperById(long superId) {
+        Super getSuper = superDao.getSuperById(superId);
+        if (getSuper != null) {
+            getSuper.setPowers(powerDao
+                    .getAllPowersForSuper(getSuper.getSuperId()));
+            getSuper.setOrganizations(organizationDao
+                    .getAllOrganizationsForSuper(getSuper.getSuperId()));
+            getSuper.setSightings(sightingDao
+                    .getAllSightingsWithSuper(getSuper.getSuperId()));
+        }
+        return getSuper;
+    }
+
+    
+    
+    @Override
+    public List<Super> getAllSupersFromLocation(long locationId) {
+        List<Super> supers = superDao.getAllSupersFromLocation(locationId);
+        for (Super currentSuper : supers) {
+            currentSuper.setPowers(powerDao
+                    .getAllPowersForSuper(currentSuper.getSuperId()));
+            currentSuper.setOrganizations(organizationDao
+                    .getAllOrganizationsForSuper(currentSuper.getSuperId()));
+            currentSuper.setSightings(sightingDao
+                    .getAllSightingsWithSuper(currentSuper.getSuperId()));
+        }
+        return supers;
+    }
+
+    
+    
+    @Override
+    public List<Super> getAllSupersFromOrganization(long organizationId) {
+        List<Super> supers = superDao.getAllSupersFromOrganization(organizationId);
+        for (Super currentSuper : supers) {
+            currentSuper.setPowers(powerDao
+                    .getAllPowersForSuper(currentSuper.getSuperId()));
+            currentSuper.setOrganizations(organizationDao
+                    .getAllOrganizationsForSuper(currentSuper.getSuperId()));
+            currentSuper.setSightings(sightingDao
+                    .getAllSightingsWithSuper(currentSuper.getSuperId()));
+        }
+        return supers;
+    }
+
+    
+    
+    @Override
+    public List<Super> getAllSupersWithPower(long powerId) {
+        List<Super> supers = superDao.getAllSupersWithPower(powerId);
+        for (Super currentSuper : supers) {
+            currentSuper.setPowers(powerDao
+                    .getAllPowersForSuper(currentSuper.getSuperId()));
+            currentSuper.setOrganizations(organizationDao
+                    .getAllOrganizationsForSuper(currentSuper.getSuperId()));
+            currentSuper.setSightings(sightingDao
+                    .getAllSightingsWithSuper(currentSuper.getSuperId()));
+        }
+        return supers;
+    }
+
+    
+    
+    @Override
+    public List<Super> getAllSupersFromSighting(long sightingId) {
+        List<Super> supers = superDao.getAllSupersFromSighting(sightingId);
+        for (Super currentSuper : supers) {
+            currentSuper.setPowers(powerDao
+                    .getAllPowersForSuper(currentSuper.getSuperId()));
+            currentSuper.setOrganizations(organizationDao
+                    .getAllOrganizationsForSuper(currentSuper.getSuperId()));
+            currentSuper.setSightings(sightingDao
+                    .getAllSightingsWithSuper(currentSuper.getSuperId()));
+        }
+        return supers;
+    }
+    
+    
+    
+}

@@ -1,0 +1,139 @@
+package com.sg.superherosightings.controller;
+
+import com.sg.superherosightings.dto.Sighting;
+import com.sg.superherosightings.dto.Super;
+import com.sg.superherosightings.service.LocationService;
+import com.sg.superherosightings.service.SightingService;
+import com.sg.superherosightings.service.SuperService;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+
+@Controller
+public class SightingController {
+    
+    
+    
+    SightingService sightingService;
+    LocationService locationService;
+    SuperService superService;
+    
+    
+    
+    @Inject
+    public SightingController(SightingService sightingService,
+            LocationService locationService, SuperService superService) {
+        this.sightingService = sightingService;
+        this.locationService = locationService;
+        this.superService = superService;
+    }
+    
+    
+    
+    @RequestMapping(value = "/displaySightingsPage", method = RequestMethod.GET)
+    public String displaySightingsPage(Model model) {
+        model.addAttribute("sightingList", sightingService.getAllSightings());
+        return "Sightings";
+    }
+    
+    
+    
+    @RequestMapping(value = "/displaySighting", method = RequestMethod.GET)
+    public String displaySighting(HttpServletRequest request, Model model) {
+        Long sightingId = Long.parseLong(request.getParameter("sightingId"));
+        model.addAttribute("sighting", sightingService.getSightingById(sightingId));
+        return "SightingDisplay";
+    }
+    
+    
+    
+    @RequestMapping(value = "/deleteSighting", method = RequestMethod.GET)
+    public String deleteSighting(HttpServletRequest request) {
+        long sightingId = Long.parseLong(request.getParameter("sightingId"));
+        sightingService.removeSighting(sightingId);
+        return "redirect:/displaySightingsPage";
+    }
+    
+    
+    
+    @RequestMapping(value = "/displayAddSighting", method = RequestMethod.GET)
+    public String displayAddSighting(Model model) {
+        model.addAttribute("locationList", locationService.getAllLocations());
+        model.addAttribute("superList", superService.getAllSupers());
+        return "SightingAdd";
+    }
+    
+    
+    
+    @RequestMapping(value = "addSighting", method = RequestMethod.POST)
+    public String addSighting(HttpServletRequest request) {
+        Sighting sighting = new Sighting();
+        sighting.setSightingDate(LocalDate.parse(request.getParameter("date")));
+        Long locationId = Long.parseLong(request.getParameter("locationSelect"));
+        sighting.setLocation(locationService.getLocationById(locationId));
+        
+        // Add selected supers
+        if (request.getParameterValues("superSelect") != null) {
+            String sIdsString[] = request.getParameterValues("superSelect");
+            List<Super> supers = new ArrayList<>();
+            for (String currentId : sIdsString) {
+                supers.add(superService.getSuperById(Long.parseLong(currentId)));
+            }
+            sighting.setSupers(supers);
+        }
+        
+        sightingService.addSighting(sighting);
+        
+        return "redirect:/displaySightingsPage";
+    }
+    
+    
+    
+    @RequestMapping(value = "/displayEditSighting", method = RequestMethod.GET)
+    public String displayEditSighting(HttpServletRequest request, Model model) {
+        Long sightingId = Long.parseLong(request.getParameter("sightingId"));
+        Sighting sighting = sightingService.getSightingById(sightingId);
+        model.addAttribute("sighting", sighting);
+        model.addAttribute("superList", superService.getAllSupers());
+        model.addAttribute("locationList", locationService.getAllLocations());
+        model.addAttribute("supers", sighting.getSupers());
+        // Allows view to use a conditional to check if a location was previously selected
+        request.setAttribute("sightingLocation", sighting.getLocation().getLocationId());
+        return "SightingEdit";
+    }
+    
+    
+    
+    @RequestMapping(value = "/editSighting", method = RequestMethod.POST)
+    public String editSighting(HttpServletRequest request) {
+        Long sightingId = Long.parseLong(request.getParameter("sightingId"));
+        Sighting sighting = sightingService.getSightingById(sightingId);
+        sighting.setSightingDate(LocalDate.parse(request.getParameter("date")));
+        Long locationId = Long.parseLong(request.getParameter("locationSelect"));
+        sighting.setLocation(locationService.getLocationById(locationId));
+        
+        // Add selected supers
+        if (request.getParameterValues("superSelect") != null) {
+            String sIdsString[] = request.getParameterValues("superSelect");
+            List<Super> supers = new ArrayList<>();
+            for (String currentId : sIdsString) {
+                supers.add(superService.getSuperById(Long.parseLong(currentId)));
+            }
+            sighting.setSupers(supers);
+        }
+        
+        sightingService.updateSighting(sighting);
+        
+        return "redirect:/displaySightingsPage";
+    }
+    
+    
+    
+}

@@ -1,0 +1,111 @@
+package com.sg.superherosightings.service;
+
+import com.sg.superherosightings.dao.OrganizationDao;
+import com.sg.superherosightings.dao.SuperDao;
+import com.sg.superherosightings.dao.SuperOrganizationDao;
+import com.sg.superherosightings.dto.Organization;
+import com.sg.superherosightings.dto.Super;
+import com.sg.superherosightings.dto.SuperOrganization;
+import java.util.List;
+import javax.inject.Inject;
+
+
+public class OrganizationServiceJdbcImpl implements OrganizationService {
+    
+    
+    
+    private final OrganizationDao organizationDao;
+    private final SuperOrganizationDao superOrganizationDao;
+    private final SuperDao superDao;
+    
+    
+    
+    @Inject
+    public OrganizationServiceJdbcImpl(OrganizationDao organizationDao, 
+            SuperOrganizationDao superOrganizationDao, SuperDao superDao) {
+        this.organizationDao = organizationDao;
+        this.superOrganizationDao = superOrganizationDao;
+        this.superDao = superDao;
+    }
+
+    
+    
+    @Override
+    public Organization addOrganization(Organization organization) {
+        organization.setOrganizationId(organizationDao.addOrganization(organization)
+                .getOrganizationId());
+        List<Super> members = organization.getMembers();
+        if (members != null && members.size() > 0) {
+            SuperOrganization superOrganization = new SuperOrganization();
+            superOrganization.setOrganization(organization);
+            for (Super currentSuper : members) {
+                superOrganization.setSuper(currentSuper);
+                superOrganizationDao.addSuperOrganizationPair(superOrganization);
+            }
+        }
+        return organization;
+    }
+
+    
+    
+    @Override
+    public void removeOrganization(long organizationId) {
+        superOrganizationDao.deletePairsByOrganization(organizationId);
+        organizationDao.removeOrganization(organizationId);
+    }
+
+    
+    
+    @Override
+    public void updateOrganization(Organization organization) {
+        superOrganizationDao.deletePairsByOrganization(organization.getOrganizationId());
+        List<Super> members = organization.getMembers();
+        if (members != null && members.size() > 0) {
+            SuperOrganization superOrganization = new SuperOrganization();
+            superOrganization.setOrganization(organization);
+            for (Super currentSuper : members) {
+                superOrganization.setSuper(currentSuper);
+                superOrganizationDao.addSuperOrganizationPair(superOrganization);
+            }
+        }
+        organizationDao.updateOrganization(organization);
+    }
+
+    
+    
+    @Override
+    public List<Organization> getAllOrganizations() {
+        List<Organization> organizations = organizationDao.getAllOrganizations();
+        for (Organization currentOrganization : organizations) {
+            currentOrganization.setMembers(superDao
+                    .getAllSupersFromOrganization(currentOrganization.getOrganizationId()));
+        }
+        return organizations;
+    }
+
+    
+    
+    @Override
+    public Organization getOrganizationById(long organizationId) {
+        Organization organization = organizationDao.getOrganizationById(organizationId);
+        if (organization != null) {
+            organization.setMembers(superDao.getAllSupersFromOrganization(organizationId));
+        }
+        return organization;
+    }
+
+    
+    
+    @Override
+    public List<Organization> getAllOrganizationsForSuper(long superId) {
+        List<Organization> organizationsFromSuper = organizationDao.getAllOrganizationsForSuper(superId);
+        for (Organization currentOrganization : organizationsFromSuper) {
+            currentOrganization.setMembers(superDao
+                    .getAllSupersFromOrganization(currentOrganization.getOrganizationId()));
+        }
+        return organizationsFromSuper;
+    }
+    
+    
+    
+}

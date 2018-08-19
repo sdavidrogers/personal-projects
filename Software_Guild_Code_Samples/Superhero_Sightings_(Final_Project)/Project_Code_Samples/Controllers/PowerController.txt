@@ -1,0 +1,99 @@
+package com.sg.superherosightings.controller;
+
+import com.sg.superherosightings.dto.Power;
+import com.sg.superherosightings.service.PowerService;
+import com.sg.superherosightings.service.SuperService;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+
+@Controller
+public class PowerController {
+    
+    
+    
+    PowerService powerService;
+    SuperService superService;
+    
+    
+    
+    @Inject
+    public PowerController(PowerService powerService, SuperService superService) {
+        this.powerService = powerService;
+        this.superService = superService;
+    }
+    
+    
+    
+    @RequestMapping(value = "/displayPowersPage", method = RequestMethod.GET)
+    public String displayPowersPage(Model model) {
+        model.addAttribute("powerList", powerService.getAllPowers());
+        return "Powers";
+    }
+    
+    
+    
+    @RequestMapping(value = "/displayPower", method = RequestMethod.GET)
+    public String displayPower(HttpServletRequest request, Model model) {
+        long powerId = Long.parseLong(request.getParameter("powerId"));
+        model.addAttribute("power", powerService.getPowerById(powerId));
+        return "PowerDisplay";
+    }
+    
+    
+    
+    @RequestMapping(value = "/deletePower", method = RequestMethod.GET)
+    public String deletePower(HttpServletRequest request) {
+        long powerId = Long.parseLong(request.getParameter("powerId"));
+        powerService.removePower(powerId);
+        return "redirect:/displayPowersPage";
+    }
+    
+    
+    
+    @RequestMapping(value = "/displayAddPower", method = RequestMethod.GET)
+    public String displayAddPower() {
+        return "PowerAdd";
+    }
+    
+    
+    
+    @RequestMapping(value = "/addPower", method = RequestMethod.POST)
+    public String addPower(HttpServletRequest request) {
+        Power power = new Power();
+        power.setPowerName(request.getParameter("name"));
+        power.setDescription(request.getParameter("description"));
+        powerService.addPower(power);
+        return "redirect:/displayPowersPage";
+    }
+    
+    
+    
+    @RequestMapping(value = "/displayEditPower", method = RequestMethod.GET)
+    public String displayEditPower(HttpServletRequest request, Model model) {
+        long powerId = Long.parseLong(request.getParameter("powerId"));
+        model.addAttribute("power", powerService.getPowerById(powerId));
+        return "PowerEdit";
+    }
+    
+    
+    
+    @RequestMapping(value = "/editPower", method = RequestMethod.POST)
+    public String editPower(@Valid @ModelAttribute("power") Power power, BindingResult result) {
+        if (result.hasErrors()) {
+            return "PowerEdit";
+        }
+        powerService.updatePower(power);
+        return "redirect:/displayPowersPage";
+    }
+    
+    
+    
+}

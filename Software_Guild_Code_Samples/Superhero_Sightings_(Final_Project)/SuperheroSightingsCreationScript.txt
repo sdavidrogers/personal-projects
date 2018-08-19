@@ -1,0 +1,136 @@
+SET SQL_SAFE_UPDATES = 0;
+
+DROP DATABASE IF EXISTS SuperheroSightings_Test;
+
+CREATE DATABASE SuperheroSightings_Test;
+
+USE SuperheroSightings_Test;
+
+
+
+CREATE TABLE Supers (
+SuperID INT NOT NULL AUTO_INCREMENT,
+Alias VARCHAR(30) NOT NULL,
+SuperType VARCHAR(10) NOT NULL,
+Description VARCHAR(100) NULL,
+PRIMARY KEY (SuperID));
+
+
+
+CREATE TABLE Powers (
+PowerID INT NOT NULL AUTO_INCREMENT,
+PowerName VARCHAR(30) NOT NULL,
+Description VARCHAR(50) NULL,
+PRIMARY KEY (PowerID));
+
+
+
+CREATE TABLE Locations (
+LocationID INT NOT NULL AUTO_INCREMENT,
+LocationName VARCHAR(30) NOT NULL,
+Description VARCHAR(100) NULL,
+Address VARCHAR(50) NULL,
+Latitude FLOAT NULL,
+Longitude FLOAT NULL,
+PRIMARY KEY (LocationID));
+
+
+
+CREATE TABLE Organizations (
+OrganizationID INT NOT NULL AUTO_INCREMENT,
+OrganizationName VARCHAR(30) NOT NULL,
+Description VARCHAR(100) NULL,
+Address VARCHAR(50) NULL,
+Phone VARCHAR(14) NULL,
+PRIMARY KEY (OrganizationID));
+
+
+
+CREATE TABLE Sightings (
+SightingID INT NOT NULL AUTO_INCREMENT,
+LocationID INT NOT NULL,
+SightingDate DATE NOT NULL,
+PRIMARY KEY (SightingID),
+FOREIGN KEY (LocationID) REFERENCES Locations(LocationID));
+
+
+
+CREATE TABLE SupersAndPowers (
+SuperID INT NOT NULL,
+PowerID INT NOT NULL,
+PRIMARY KEY (SuperID, PowerID));
+
+ALTER TABLE SupersAndPowers
+ADD CONSTRAINT fk_SupersAndPowers_Super 
+FOREIGN KEY (SuperID) REFERENCES Supers(SuperID);
+
+ALTER TABLE SupersAndPowers
+ADD CONSTRAINT fk_SupersAndPowers_Power
+FOREIGN KEY (PowerID) REFERENCES Powers(PowerID);
+
+
+
+CREATE TABLE SupersAndSightings (
+SuperID INT NOT NULL,
+SightingID INT NOT NULL,
+PRIMARY KEY (SuperID, SightingID));
+
+ALTER TABLE SupersAndSightings
+ADD CONSTRAINT fk_SupersAndSightings_Super 
+FOREIGN KEY (SuperID) REFERENCES Supers(SuperID);
+
+ALTER TABLE SupersAndSightings
+ADD CONSTRAINT fk_SupersAndSightings_Sighting
+FOREIGN KEY (SightingID) REFERENCES Sightings(SightingID);
+
+
+
+CREATE TABLE SupersAndOrganizations (
+SuperID INT NOT NULL,
+OrganizationID INT NOT NULL,
+PRIMARY KEY (SuperID, OrganizationID));
+
+ALTER TABLE SupersAndOrganizations
+ADD CONSTRAINT fk_SupersAndOrganizations_Super 
+FOREIGN KEY (SuperID) REFERENCES Supers(SuperID);
+
+ALTER TABLE SupersAndOrganizations
+ADD CONSTRAINT fk_SupersAndOrganizations_Organization
+FOREIGN KEY (OrganizationID) REFERENCES Organizations(OrganizationID);
+
+
+
+CREATE TABLE `Users` (
+ `UserID` INT NOT NULL AUTO_INCREMENT,
+ `Username` varchar(20) NOT NULL,
+ `Password` varchar(100) NOT NULL,
+ `UserType` varchar(10) NOT NULL,
+ `enabled` tinyint(1) NOT NULL,
+ PRIMARY KEY (`UserID`),
+ KEY `Username` (`Username`));
+
+
+
+INSERT INTO `Users` (`UserID`, `Username`, `Password`, `UserType`, `enabled`) VALUES
+(1, 'master', '$2a$10$fSoLLwBthDUjLjD58b1AU.qCgGYtq/WX/5hjJHkYIv5EArTnsoRUm', 'Admin', 1),
+(2, 'apprentice', '$2a$10$fSoLLwBthDUjLjD58b1AU.qCgGYtq/WX/5hjJHkYIv5EArTnsoRUm', 'Sidekick', 1);
+
+
+
+CREATE TABLE `Authorities` (
+ `Username` varchar(20) NOT NULL,
+ `Authority` varchar(20) NOT NULL,
+ KEY `Username` (`Username`));
+
+
+
+INSERT INTO `Authorities` (`Username`, `Authority`) VALUES
+('master', 'ROLE_ADMIN'),
+('master', 'ROLE_USER'),
+('apprentice', 'ROLE_USER');
+
+
+
+ALTER TABLE `Authorities`
+ ADD CONSTRAINT `authorities_ibfk_1` FOREIGN KEY (`Username`) REFERENCES `Users` (`Username`);
+

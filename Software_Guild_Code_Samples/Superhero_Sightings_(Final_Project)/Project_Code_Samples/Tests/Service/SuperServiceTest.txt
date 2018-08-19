@@ -1,0 +1,279 @@
+package com.sg.superherosightings.service;
+
+import com.sg.superherosightings.dto.Location;
+import com.sg.superherosightings.dto.Organization;
+import com.sg.superherosightings.dto.Power;
+import com.sg.superherosightings.dto.Sighting;
+import com.sg.superherosightings.dto.Super;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.After;
+import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+
+public class SuperServiceJdbcImplTest {
+
+    private SuperService superService;
+    private PowerService powerService;
+    private OrganizationService organizationService;
+    private LocationService locationService;
+    private SightingService sightingService;
+    
+    public SuperServiceJdbcImplTest() {
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("test-applicationContext.xml");
+        locationService = ctx.getBean("locationService", LocationService.class);
+        powerService = ctx.getBean("powerService", PowerService.class);
+        organizationService = ctx.getBean("organizationService", OrganizationService.class);
+        superService = ctx.getBean("superService", SuperService.class);
+        sightingService = ctx.getBean("sightingService", SightingService.class);
+    }
+    
+    @BeforeClass
+    public static void setUpClass() {
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+    }
+    
+    @Before
+    public void setUp() {
+        for (Super currentSuper : superService.getAllSupers()) {
+            superService.removeSuper(currentSuper.getSuperId());
+        }
+        
+        for (Power currentPower : powerService.getAllPowers()) {
+            powerService.removePower(currentPower.getPowerId());
+        }
+        
+        for (Organization currentOrganization: organizationService.getAllOrganizations()) {
+            organizationService.removeOrganization(currentOrganization.getOrganizationId());
+        }
+        
+        for (Sighting currentSighting : sightingService.getAllSightings()) {
+            sightingService.removeSighting(currentSighting.getSightingId());
+        }
+        
+        for (Location currentLocation : locationService.getAllLocations()) {
+            locationService.removeLocation(currentLocation.getLocationId());
+        }
+    }
+    
+    @After
+    public void tearDown() {
+        for (Super currentSuper : superService.getAllSupers()) {
+            superService.removeSuper(currentSuper.getSuperId());
+        }
+        
+        for (Power currentPower : powerService.getAllPowers()) {
+            powerService.removePower(currentPower.getPowerId());
+        }
+        
+        for (Organization currentOrganization: organizationService.getAllOrganizations()) {
+            organizationService.removeOrganization(currentOrganization.getOrganizationId());
+        }
+        
+        for (Sighting currentSighting : sightingService.getAllSightings()) {
+            sightingService.removeSighting(currentSighting.getSightingId());
+        }
+        
+        for (Location currentLocation : locationService.getAllLocations()) {
+            locationService.removeLocation(currentLocation.getLocationId());
+        }
+    }
+
+    @Test
+    public void testAddGetSuper() {
+        Super addSuper = new Super();
+        addSuper.setAlias("Bad Boy");
+        addSuper.setSuperType("Villain");
+        addSuper.setDescription("One bad boy.");
+        
+        addSuper = superService.addSuper(addSuper);    
+        Super retrievedSuper = superService.getSuperById(addSuper.getSuperId());
+        assertEquals(addSuper, retrievedSuper);
+    }
+
+    @Test
+    public void testRemoveSuper() {
+        Super addSuper = new Super();
+        addSuper.setAlias("Bad Boy");
+        addSuper.setSuperType("Villain");
+        addSuper.setDescription("One bad boy.");
+        
+        addSuper = superService.addSuper(addSuper);
+        Super retrievedSuper = superService.getSuperById(addSuper.getSuperId());
+        assertEquals(addSuper, retrievedSuper);
+        
+        superService.removeSuper(addSuper.getSuperId());
+        assertNull(superService.getSuperById(addSuper.getSuperId()));
+    }
+
+    @Test
+    public void testUpdateSuper() {
+        Super addSuper = new Super();
+        addSuper.setAlias("Bad Boy");
+        addSuper.setSuperType("Villain");
+        addSuper.setDescription("One bad boy.");
+        
+        addSuper = superService.addSuper(addSuper);
+        addSuper.setAlias("Very Bad Boy");
+        superService.updateSuper(addSuper);
+        Super retrievedSuper = superService.getSuperById(addSuper.getSuperId());
+        assertEquals(addSuper, retrievedSuper);
+    }
+
+    @Test
+    public void testGetAllSupers() {
+        Super addSuper = new Super();
+        addSuper.setAlias("Bad Boy");
+        addSuper.setSuperType("Villain");
+        addSuper.setDescription("One bad boy.");
+        
+        superService.addSuper(addSuper);
+        
+        Super secondSuper = new Super();
+        secondSuper.setAlias("Good Boy");
+        secondSuper.setSuperType("Hero");
+        secondSuper.setDescription("One good boy.");
+        
+        superService.addSuper(secondSuper);
+        
+        assertEquals(2, superService.getAllSupers().size());
+    }
+
+    @Test
+    public void testGetAllSupersFromLocation() {
+        List<Super> supersCheck = new ArrayList<>();
+        
+        Super addSuper = new Super();
+        addSuper.setAlias("Bad Boy");
+        addSuper.setSuperType("Villain");
+        addSuper.setDescription("One bad boy.");
+        addSuper = superService.addSuper(addSuper);
+        supersCheck.add(addSuper);
+        
+        Super secondSuper = new Super();
+        secondSuper.setAlias("Good Boy");
+        secondSuper.setSuperType("Hero");
+        secondSuper.setDescription("One good boy.");
+        secondSuper = superService.addSuper(secondSuper);
+        supersCheck.add(secondSuper);
+                
+        Location location = new Location();
+        location.setLocationName("My house");
+        location.setDescription("My beautiful house");
+        location.setAddress("4059 St. Clair Avenue");
+        location.setLatitude(10);
+        location.setLongitude(8);
+        location = locationService.addLocation(location);
+        
+        Sighting sighting = new Sighting();
+        sighting.setLocation(location);
+        sighting.setSightingDate(LocalDate.parse("1991-11-08"));
+        sighting.setSupers(supersCheck);
+        sightingService.addSighting(sighting);
+        
+        assertEquals(2, superService.getAllSupersFromLocation(location.getLocationId()).size());
+    }
+
+    @Test
+    public void testGetAllSupersFromOrganization() {
+        List<Organization> organizations = new ArrayList<>();
+        
+        Organization organization = new Organization();
+        organization.setOrganizationName("The Bad Guys");
+        organization.setDescription("Group for bad guys.");
+        organization.setAddress("666 Bad Boy Lane");
+        organization.setPhone("330-612-8177");
+        organization = organizationService.addOrganization(organization);
+        organizations.add(organization);
+        
+        Super addSuper = new Super();
+        addSuper.setAlias("Bad Boy");
+        addSuper.setSuperType("Villain");
+        addSuper.setDescription("One bad boy.");
+        addSuper.setOrganizations(organizations);
+        superService.addSuper(addSuper);
+        
+        Super secondSuper = new Super();
+        secondSuper.setAlias("Good Boy");
+        secondSuper.setSuperType("Hero");
+        secondSuper.setDescription("One good boy.");
+        secondSuper.setOrganizations(organizations);
+        superService.addSuper(secondSuper);
+        
+        assertEquals(2, superService.getAllSupersFromOrganization(organization.getOrganizationId()).size());
+    }
+
+    @Test
+    public void testGetAllSupersWithPower() {
+        List<Power> powers = new ArrayList<>();
+        
+        Power power = new Power();
+        power.setPowerName("Flight");
+        power.setDescription("They can fly.");
+        power = powerService.addPower(power);
+        powers.add(power);
+        
+        Super addSuper = new Super();
+        addSuper.setAlias("Bad Boy");
+        addSuper.setSuperType("Villain");
+        addSuper.setDescription("One bad boy.");
+        addSuper.setPowers(powers);
+        superService.addSuper(addSuper);
+        
+        Super secondSuper = new Super();
+        secondSuper.setAlias("Good Boy");
+        secondSuper.setSuperType("Hero");
+        secondSuper.setDescription("One good boy.");
+        secondSuper.setPowers(powers);
+        superService.addSuper(secondSuper);
+        
+        assertEquals(2, superService.getAllSupersWithPower(power.getPowerId()).size());
+    }
+
+    @Test
+    public void testGetAllSupersFromSighting() {
+        List<Super> supersCheck = new ArrayList<>();
+        
+        Super addSuper = new Super();
+        addSuper.setAlias("Bad Boy");
+        addSuper.setSuperType("Villain");
+        addSuper.setDescription("One bad boy.");
+        addSuper = superService.addSuper(addSuper);
+        supersCheck.add(addSuper);
+        
+        Super secondSuper = new Super();
+        secondSuper.setAlias("Good Boy");
+        secondSuper.setSuperType("Hero");
+        secondSuper.setDescription("One good boy.");
+        secondSuper = superService.addSuper(secondSuper);
+        supersCheck.add(secondSuper);
+                
+        Location location = new Location();
+        location.setLocationName("My house");
+        location.setDescription("My beautiful house");
+        location.setAddress("4059 St. Clair Avenue");
+        location.setLatitude(10);
+        location.setLongitude(8);
+        location = locationService.addLocation(location);
+        
+        Sighting sighting = new Sighting();
+        sighting.setLocation(location);
+        sighting.setSightingDate(LocalDate.parse("1991-11-08"));
+        sighting.setSupers(supersCheck);
+        sightingService.addSighting(sighting);
+        
+        assertEquals(2, superService.getAllSupersFromSighting(sighting.getSightingId()).size());
+    }
+    
+}

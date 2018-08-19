@@ -1,0 +1,190 @@
+package com.sg.superherosightings.dao;
+
+import com.sg.superherosightings.dto.Location;
+import com.sg.superherosightings.dto.Sighting;
+import com.sg.superherosightings.dto.Super;
+import com.sg.superherosightings.dto.SuperSighting;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import static org.junit.Assert.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+
+public class LocationDaoJdbcImplTest {
+    
+    LocationDao locationDao;
+    SuperDao superDao;
+    SightingDao sightingDao;
+    SuperSightingDao superSightingDao;
+    
+    public LocationDaoJdbcImplTest() {
+        ApplicationContext ctx
+                = new ClassPathXmlApplicationContext("test-applicationContext.xml");
+        locationDao = ctx.getBean("locationDao", LocationDao.class);
+        superDao = ctx.getBean("superDao", SuperDao.class);
+        sightingDao = ctx.getBean("sightingDao", SightingDao.class);
+        superSightingDao = ctx.getBean("superSightingDao", SuperSightingDao.class);
+    }
+    
+    @BeforeClass
+    public static void setUpClass() {
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+    }
+    
+    @Before
+    public void setUp() {
+        superSightingDao.deleteAllPairs();
+        
+        for (Sighting currentSighting : sightingDao.getAllSightings()) {
+            sightingDao.removeSighting(currentSighting.getSightingId());
+        }
+        
+        for (Location currentLocation : locationDao.getAllLocations()) {
+            locationDao.removeLocation(currentLocation.getLocationId());
+        }
+        
+        for (Super currentSuper : superDao.getAllSupers()) {
+            superDao.removeSuper(currentSuper.getSuperId());
+        }
+        
+    }
+    
+    @After
+    public void tearDown() {
+        superSightingDao.deleteAllPairs();
+        
+        for (Sighting currentSighting : sightingDao.getAllSightings()) {
+            sightingDao.removeSighting(currentSighting.getSightingId());
+        }
+        
+        for (Location currentLocation : locationDao.getAllLocations()) {
+            locationDao.removeLocation(currentLocation.getLocationId());
+        }
+        
+        for (Super currentSuper : superDao.getAllSupers()) {
+            superDao.removeSuper(currentSuper.getSuperId());
+        }
+    }
+
+    @Test
+    public void addGetLocation() {
+        Location location = new Location();
+        location.setLocationName("My house");
+        location.setDescription("My beautiful house");
+        location.setAddress("4059 St. Clair Avenue");
+        location.setLatitude(10);
+        location.setLongitude(8);
+        location = locationDao.addLocation(location);
+        
+        assertEquals(location, locationDao.getLocationById(location.getLocationId()));
+    }
+    
+    @Test
+    public void deleteLocation() {
+        Location location = new Location();
+        location.setLocationName("My house");
+        location.setDescription("My beautiful house");
+        location.setAddress("4059 St. Clair Avenue");
+        location.setLatitude(10);
+        location.setLongitude(8);
+        location = locationDao.addLocation(location);
+        
+        assertEquals(location, locationDao.getLocationById(location.getLocationId()));
+        locationDao.removeLocation(location.getLocationId());
+        assertNull(locationDao.getLocationById(location.getLocationId()));
+    }
+    
+    @Test
+    public void updateLocation() {
+        Location location = new Location();
+        location.setLocationName("My house");
+        location.setDescription("My beautiful house");
+        location.setAddress("4059 St. Clair Avenue");
+        location.setLatitude(10);
+        location.setLongitude(8);
+        location = locationDao.addLocation(location);
+        
+        location.setAddress("2220 Tamarisk Ct.");
+        locationDao.updateLocation(location);
+        assertEquals(location, locationDao.getLocationById(location.getLocationId()));
+    }
+    
+    @Test
+    public void getAllLocations() {
+        Location location = new Location();
+        location.setLocationName("My house");
+        location.setDescription("My beautiful house");
+        location.setAddress("4059 St. Clair Avenue");
+        location.setLatitude(10);
+        location.setLongitude(8);
+        locationDao.addLocation(location);
+        
+        Location locationTwo = new Location();
+        locationTwo.setLocationName("My house");
+        locationTwo.setDescription("My beautiful house");
+        locationTwo.setAddress("4059 St. Clair Avenue");
+        locationTwo.setLatitude(10);
+        locationTwo.setLongitude(8);
+        locationDao.addLocation(locationTwo);
+        
+        assertEquals(2, locationDao.getAllLocations().size());
+    }
+    
+    @Test
+    public void getAllLocationsWithSuper() {
+        List<Location> locations = new ArrayList<>();
+        SuperSighting superSighting = new SuperSighting();
+        
+        Super addSuper = new Super();
+        addSuper.setAlias("Bad Boy");
+        addSuper.setSuperType("Villain");
+        addSuper.setDescription("One bad boy.");
+        addSuper = superDao.addSuper(addSuper);
+        superSighting.setSuper(addSuper);
+        
+        Location location = new Location();
+        location.setLocationName("My house");
+        location.setDescription("My beautiful house");
+        location.setAddress("4059 St. Clair Avenue");
+        location.setLatitude(10);
+        location.setLongitude(8);
+        location = locationDao.addLocation(location);
+        locations.add(location);
+        
+        Location locationTwo = new Location();
+        locationTwo.setLocationName("My house");
+        locationTwo.setDescription("My beautiful house");
+        locationTwo.setAddress("4059 St. Clair Avenue");
+        locationTwo.setLatitude(10);
+        locationTwo.setLongitude(8);
+        locationTwo = locationDao.addLocation(locationTwo);
+        locations.add(locationTwo);
+        
+        Sighting sighting = new Sighting();
+        sighting.setLocation(location);
+        sighting.setSightingDate(LocalDate.parse("1991-11-08"));
+        sightingDao.addSighting(sighting);
+        superSighting.setSighting(sighting);
+        superSightingDao.addSuperSightingPair(superSighting);
+        
+        Sighting sightingTwo = new Sighting();
+        sightingTwo.setLocation(locationTwo);
+        sightingTwo.setSightingDate(LocalDate.parse("1991-11-09"));
+        sightingDao.addSighting(sightingTwo);
+        superSighting.setSighting(sightingTwo);
+        superSightingDao.addSuperSightingPair(superSighting);
+        
+        assertEquals(locations, locationDao.getAllLocationsFromSuper(addSuper.getSuperId()));
+    }
+    
+}

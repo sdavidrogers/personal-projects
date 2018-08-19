@@ -1,0 +1,103 @@
+package com.sg.superherosightings.controller;
+
+import com.sg.superherosightings.dto.Location;
+import com.sg.superherosightings.service.LocationService;
+import com.sg.superherosightings.service.SuperService;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+
+@Controller
+public class LocationController {
+    
+    
+    
+    LocationService locationService;
+    SuperService superService;
+    
+    
+    
+    @Inject
+    public LocationController(LocationService locationService, SuperService superService) {
+        this.locationService = locationService;
+        this.superService = superService;
+    }
+    
+    
+    
+    @RequestMapping(value = "/displayLocationsPage", method = RequestMethod.GET)
+    public String displayLocationsPage(Model model) {
+        model.addAttribute("locationList", locationService.getAllLocations());
+        return "Locations";
+    }
+    
+    
+    
+    @RequestMapping(value = "/displayLocation", method = RequestMethod.GET)
+    public String displayLocation(HttpServletRequest request, Model model) {
+        long locationId = Long.parseLong(request.getParameter("locationId"));
+        model.addAttribute("location", locationService.getLocationById(locationId));
+        model.addAttribute("supersSighted", superService.getAllSupersFromLocation(locationId));
+        return "LocationDisplay";
+    }
+    
+    
+    
+    @RequestMapping(value = "/deleteLocation", method = RequestMethod.GET)
+    public String deleteOrganization(HttpServletRequest request) {
+        long locationId = Long.parseLong(request.getParameter("locationId"));
+        locationService.removeLocation(locationId);
+        return "redirect:/displayLocationsPage";
+    }
+    
+    
+    
+    @RequestMapping(value = "/displayAddLocation", method = RequestMethod.GET)
+    public String displayAddLocation() {
+        return "LocationAdd";
+    }
+    
+    
+    
+    @RequestMapping(value = "/addLocation", method = RequestMethod.POST)
+    public String addLocation(HttpServletRequest request) {
+        Location location = new Location();
+        location.setLocationName(request.getParameter("name"));
+        location.setDescription(request.getParameter("description"));
+        location.setAddress(request.getParameter("address"));
+        location.setLatitude(Double.parseDouble(request.getParameter("latitude")));
+        location.setLongitude(Double.parseDouble(request.getParameter("longitude")));
+        locationService.addLocation(location);
+        return "redirect:/displayLocationsPage";
+    }
+    
+    
+    
+    @RequestMapping(value = "/displayEditLocation", method = RequestMethod.GET)
+    public String displayEditLocation(HttpServletRequest request, Model model) {
+        long locationId = Long.parseLong(request.getParameter("locationId"));
+        model.addAttribute("location", locationService.getLocationById(locationId));
+        return "LocationEdit";
+    }
+    
+    
+    
+    @RequestMapping(value = "/editLocation", method = RequestMethod.POST)
+    public String editLocation(@Valid @ModelAttribute("location") Location location, BindingResult result) {
+        if (result.hasErrors()) {
+            return "LocationEdit";
+        }
+        locationService.updateLocation(location);
+        return "redirect:/displayLocationsPage";
+    }
+    
+    
+    
+}

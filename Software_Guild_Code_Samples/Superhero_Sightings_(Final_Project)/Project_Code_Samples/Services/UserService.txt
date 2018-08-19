@@ -1,0 +1,59 @@
+package com.sg.superherosightings.service;
+
+import com.sg.superherosightings.dao.UserDao;
+import com.sg.superherosightings.dto.User;
+import java.util.List;
+import javax.inject.Inject;
+
+public class UserServiceJdbcImpl implements UserService {
+    
+    
+    
+    private final UserDao userDao;
+    
+    
+    
+    @Inject
+    public UserServiceJdbcImpl(UserDao userDao) {
+        this.userDao = userDao;
+    }
+
+    
+    
+    @Override
+    public User addUser(User newUser) {
+        return userDao.addUser(newUser);
+    }
+
+    
+    
+    @Override
+    public void deleteUser(String username) {
+        userDao.deleteUser(username);
+    }
+
+    
+    
+    @Override
+    public void updateUser(User updatedUser) {
+        userDao.updateUser(updatedUser);
+    }
+
+    
+    
+    
+    @Override
+    public List<User> getAllUsers() {
+        return userDao.getAllUsers();
+    }
+    
+    
+    
+    @Override
+    public User getUserByUsername(String username) {
+        return userDao.getUserByUsername(username);
+    }
+    
+    
+    
+}
